@@ -45,7 +45,7 @@ int main()
 }
 ```
 
-运行结果：![1554225043432](https://github.com/pickled-fish/View/blob/master/Mmmmmmi/resource/1554225043432.png)
+运行结果：![1554225043432](https://github.com/Mmmmmmi/MyNote/tree/master/resource/1554225043432.png)
 
 </details>
 
@@ -116,7 +116,7 @@ int main()
 }
 ```
 
-输出结果：![1554223919220](https://github.com/pickled-fish/View/blob/master/Mmmmmmi/resource/1554223919220.png)
+输出结果：![1554223919220](https://github.com/Mmmmmmi/MyNote/tree/master/resource/1554223919220.png)
 
 </details>
 
