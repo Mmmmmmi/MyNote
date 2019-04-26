@@ -1,28 +1,15 @@
 # **C++**
+- [**类和对象**](#类和对象)
+- [**关键字**](#关键字)
+- [**STL**](#stl)
+- [**C++11**](#c11)
+- [**设计模式**](#设计模式)
+## **类和对象**
 
-## **STL六大组件的问题**
+###
+<b><details><summary>this指针</summary></b>
 
-<b><details><summary>容器</summary></b>
-</details>
-
-<b><details><summary>迭代器</summary></b>
-</details>
-
-<b><details><summary>仿函数</summary></b>
-</details>
-
-<b><details><summary>适配器</summary></b>
-</details>
-
-<b><details><summary>算法</summary></b>
-</details>
-
-<b><details><summary>空间适配器</summary></b>
-</details>
-
-## **`this`指针问题**
-
-### **`this`指针什么时间产生**
+#### **`this`指针什么时间产生**
 
 this指针在成员函数的开始前构造，在成员函数的结束后清除，生命周期和其他函数参数一样。当调用一个类的成员函数时，编译器将类的指针作为函数的this参数传递进去。
 举个栗子：
@@ -34,7 +21,7 @@ stu.print(3);
 stu.print(&stu, 3);
 ```
 
-### **能不能在析构函数中`delete this`**
+#### **能不能在析构函数中`delete this`**
 
 不能，因为`delete`一个指针，首先会调用构造函数，然后再释放空间，而析构函数中又会调用这一步，形成死循环。
 
@@ -60,9 +47,10 @@ int main()
 
 运行结果：![1554225043432](https://github.com/pickled-fish/View/blob/master/Mmmmmmi/resource/1554225043432.png)
 
-## **类的相关问题**
+</details>
 
-### **类大小问题**
+###
+<b><details><summary>类大小</summary></b>
 
 ```c++
 #include <iostream>
@@ -129,7 +117,8 @@ int main()
 ```
 
 输出结果：![1554223919220](https://github.com/pickled-fish/View/blob/master/Mmmmmmi/resource/1554223919220.png)
-    
+
+</details>
 
 ### **重写、重载、重定义的区别**
 
@@ -144,21 +133,29 @@ int main()
 - **友元函数**，友元函数不属于类的成员函数，因此无法继承，也无法实现多态。
 - **内联成员函数**，不一定，因为有可能直接展开没有地址。
 
+</details>
+
 ## **关键字**
 
-### **static**
+<b><details><summary>static</summary></b>
+</details>
 
-### **const**
+<b><details><summary>const</summary></b>
+</details>
 
-### **explicit**
+<b><details><summary>explicit</summary></b>
+</details>
 
-### **inline**
+<b><details><summary>inline</summary></b>
+</details>
 
-### **extern**
+<b><details><summary>extern</summary></b>
+</details>
 
-### **decltype**
+<b><details><summary>decltype</summary></b>
+</details>
 
-### **volatile**
+<b><details><summary>volatile</summary></b>
 
 - volatile 关键字是一种类型修饰符，用它声明的类型变量表示可以被某些编译器未知的因素（操作系统、硬件、其它线程等）更改。所以使用 volatile 告诉编译器不应对这样的对象进行优化。
 - volatile 关键字声明的变量，每次访问时都必须从内存中取出值（没有被 volatile 修饰的变量，可能由于编译器的优化，从 CPU 寄存器中取值）
@@ -167,21 +164,47 @@ int main()
 - 适应场景：
   - 多线程编程中用到，比如线程安全的单例模式
 
-## **智能指针问题**
+</details>
 
-### **auto_ptr**
+## **STL**
 
-### **unique_ptr**
+<b><details><summary>容器</summary></b>
+</details>
 
-### **shared_ptr**
+<b><details><summary>迭代器</summary></b>
+</details>
 
-### **线程安全问题**
+<b><details><summary>仿函数</summary></b>
+</details>
+
+<b><details><summary>适配器</summary></b>
+</details>
+
+<b><details><summary>算法</summary></b>
+</details>
+
+<b><details><summary>空间适配器</summary></b>
+</details>
+
+## **C++11**
+
+### **智能指针**
+
+<b><details><summary>auto_ptr<summary></b>
+</details>
+
+<b><details><summary>unique_ptr<summary></b>
+</details>
+
+<b><details><summary>shared_ptr<summary></b>
+</details>
 
 ## **设计模式**
 
+###
 <b><details><summary>单例模式</summary></b>
 
-### **饿汉模式**
+#### **饿汉模式**
 
 ```c++
 //饿汉模式
@@ -224,7 +247,7 @@ Singleton1* Singleton1::_singleton;
 Singleton1::Free Singleton1::free;
 ```
 
-### **懒汉模式**
+#### **懒汉模式**
 
 ```c++
 #include <mutex>
@@ -287,4 +310,5 @@ Singleton2::Free Singleton2::free;
 
 </details>
 
+###
 <b><details><summary>观察者模式</summary></b>
