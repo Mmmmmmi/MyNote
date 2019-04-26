@@ -1,5 +1,5 @@
 # **数据库**
-
+   **学习环境为MySQL**
 ## **安装**
 
 - windows
@@ -8,7 +8,7 @@
 
      ![down](https://github.com/pickled-fish/View/blob/master/Mmmmmmi/resource/MySQLDown.png)
 
-  2. 下载完成后，将压缩包解压到解压到你想安装的路径
+  2. 下载完成后，将压缩包解压到解压到想安装的路径
 
      ![](https://github.com/pickled-fish/View/blob/master/Mmmmmmi/resource/MySQLPATH.png)
 
@@ -63,6 +63,79 @@
   7. 修改密码，``` ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';```，``` new password``` 为新的密码
 
   8. 问题：可能由于依赖不足产生问题，可以尝试下面的命令移除对` mariadb-libs`：``` yum -y remove mariadb-libs ``` 
+
+
+## **数据库操作**
+
+### **基本操作**
+
+**连接服务器**
+
+```sql
+mysql -h 127.0.0.1 -P 3306  -u root -p 
+```
+
+**初次登陆修改密码**
+
+<code> 
+
+aaa
+
+<code>
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password'; 
+
+**创建数据库**
+
+create database helloworld; 
+
+**使用数据库**
+
+use helloworld; 
+
+**创建数据库表**
+
+create table student(     id int,     name varchar(32),     gender varchar(2) ); 
+
+**表中插入数据**
+
+insert into student (id, name, gender) values (1, '张三', '男'); insert into student (id, name, gender) values (2, '李四', '女'); insert into student (id, name, gender) values (3, '王五', '男'); 
+
+**批量插入数据**
+
+insert into student (id, name, gender) values (3, '王五', '男'),(4, '王麻子', '男')); 
+
+**查询表中的数据**
+
+select * from student; 
+
+**MySQL存储引擎**
+
+**查看引擎**
+
+show engines; 
+
+### **SQL分类**
+
+\1. 数据库定义语言(Data Define Language，DDL)
+
+- 定义数据库的模式、外模式、和内模式
+- 定义模式/内模式和外模式/模式二级映像
+- 定义有关的约束条件维护数据的存储结果
+
+create drop alter 
+
+\2. 数据库操纵语言(Data Manipulation Language，DML)
+
+- 实现对数据库的基本操作，包括检索、更新(包括插入、修改和删除)等
+
+insert delete update 
+
+\3. 数据库控制语言(Data Control Language，DCL)
+
+- 负责管理数据库权限以及事务
+
+grant revoke commit 
 
   
 
