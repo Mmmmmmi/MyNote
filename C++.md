@@ -45,7 +45,7 @@ int main()
 }
 ```
 
-运行结果：![1554225043432](https://github.com/Mmmmmmi/MyNote/tree/master/resource/1554225043432.png)
+运行结果：![1554225043432](https://github.com/Mmmmmmi/MyNote/master/resource/1554225043432.png)
 
 </details>
 
