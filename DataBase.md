@@ -51,33 +51,33 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
 ```
 **创建数据库**
 ```
-create database helloworld; 
+create database helloworld;
 ```
 **使用数据库**
 ```
-use helloworld; 
+use helloworld;
 ```
 **创建数据库表**
 ```
-create table student(     id int,     name varchar(32),     gender varchar(2) ); 
+create table student(     id int,     name varchar(32),     gender varchar(2) );
 ```
 **表中插入数据**
 ```
-insert into student (id, name, gender) values (1, '张三', '男'); insert into student (id, name, gender) values (2, '李四', '女'); insert into student (id, name, gender) values (3, '王五', '男'); 
+insert into student (id, name, gender) values (1, '张三', '男'); insert into student (id, name, gender) values (2, '李四', '女'); insert into student (id, name, gender) values (3, '王五', '男');
 ```
 **批量插入数据**
 ```
-insert into student (id, name, gender) values (3, '王五', '男'),(4, '王麻子', '男')); 
+insert into student (id, name, gender) values (3, '王五', '男'),(4, '王麻子', '男'));
 ```
 **查询表中的数据**
 ```
-select * from student; 
+select * from student;
 ```
 **MySQL 存储引擎**
 
 **查看引擎**
 ```
-show engines; 
+show engines;
 ```
 ### **SQL 分类**
 
@@ -93,7 +93,7 @@ create drop alter
 
 - 实现对数据库的基本操作，包括检索、更新（包括插入、修改和删除) 等
 ```
-insert delete update 
+insert delete update
 ```
 3. 数据库控制语言 (Data Control Language，DCL)
 
