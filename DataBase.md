@@ -5,7 +5,7 @@
 - windows
 
   1. 压缩包下载地址：<https://downloads.mysql.com/archives/community/>
-     ![down](/MySQLDown.png)
+     ![down](https://github.com/Mmmmmmi/MyNote/tree/master/resource/MySQLDown.png)
   2. 下载完成后，将压缩包解压到解压到想安装的路径
      ![](https://github.com/Mmmmmmi/MyNote/tree/master/resource/MySQLPATH.png)
   3. 将该目录下的 bin 添加到系统 path 系统变量中，右键我的电脑（此电脑)-- 高级系统设置 -- 环境变量 -- 下面的系统变量（S）中的 path 变量 --- 编辑 -- 新建。
