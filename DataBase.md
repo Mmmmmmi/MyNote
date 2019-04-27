@@ -5,21 +5,21 @@
 - windows
 
   1. 压缩包下载地址：<https://downloads.mysql.com/archives/community/>
-     ![down](https://github.com/Mmmmmmi/MyNote/tree/master/resource/MySQLDown.png)
+     ![down](https://github.com/Mmmmmmi/MyNote/blob/master/resource/MySQLDown.png)
   2. 下载完成后，将压缩包解压到解压到想安装的路径
-     ![](https://github.com/Mmmmmmi/MyNote/tree/master/resource/MySQLPATH.png)
+     ![](https://github.com/Mmmmmmi/MyNote/blob/master/resource/MySQLPATH.png)
   3. 将该目录下的 bin 添加到系统 path 系统变量中，右键我的电脑（此电脑)-- 高级系统设置 -- 环境变量 -- 下面的系统变量（S）中的 path 变量 --- 编辑 -- 新建。
-     ![](https://github.com/Mmmmmmi/MyNote/tree/master/resource/binpath.png)
-     ![](https://github.com/Mmmmmmi/MyNote/tree/master/resource/addpath.png)
+     ![](https://github.com/Mmmmmmi/MyNote/blob/master/resource/binpath.png)
+     ![](https://github.com/Mmmmmmi/MyNote/blob/master/resource/addpath.png)
   4. 以管理员运行 CMD（右键左下角 Window PowerShell 管理员也行)，进入 MySQL 的 bin 目录下，输入`mysqld install` 再输入` mysqld --initialize-insecure`
-     ![](https://github.com/Mmmmmmi/MyNote/tree/master/resource/install.png)
-     ![](https://github.com/Mmmmmmi/MyNote/tree/master/resource/init.png)
+     ![](https://github.com/Mmmmmmi/MyNote/blob/master/resource/install.png)
+     ![](https://github.com/Mmmmmmi/MyNote/blob/master/resource/init.png)
   5. 启动 MySQL 服务，在任意目录下均可。输入` net start mysql`
-     ![](https://github.com/Mmmmmmi/MyNote/tree/master/resource/start.png)
+     ![](https://github.com/Mmmmmmi/MyNote/blob/master/resource/start.png)
   6. 初次安装，配置 root 密码，在打开的 CMD 界面，输入 ` mysql -u root`，首次登陆无需密码，直接回车。
-     ![](https://github.com/Mmmmmmi/MyNote/tree/master/resource/rootinit.png)
+     ![](https://github.com/Mmmmmmi/MyNote/blob/master/resource/rootinit.png)
   7. 输入` ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';`   `new password` 为新密码。输入完成后，退出（输入 quit)。
-     ![](https://github.com/Mmmmmmi/MyNote/tree/master/resource/newpasswd.png)
+     ![](https://github.com/Mmmmmmi/MyNote/blob/master/resource/newpasswd.png)
   8. 重新登陆`mysql -u root -p`，这次输入新的密码登陆即可。
 - Centos 7
   1. 添加 Yum Repository
