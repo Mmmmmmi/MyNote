@@ -1,5 +1,6 @@
 # **C++**
 - [**类和对象**](#类和对象)
+- [**动态内存管理**](#动态内存管理)
 - [**关键字**](#关键字)
 - [**STL**](#stl)
 - [**C++11**](#c11)
@@ -9,23 +10,24 @@
 ###
 <b><details><summary>this 指针</summary></b>
 
-#### **`this`指针什么时间产生**
+#### **`this` 指针什么时间产生**
 
-this 指针在成员函数的开始前构造，在成员函数的结束后清除，生命周期和其他函数参数一样。当调用一个类的成员函数时，编译器将类的指针作为函数的 this 参数传递进去。
+    this 指针在成员函数的开始前构造，在成员函数的结束后清除，生命周期和其他函数参数一样。当调用一个类的成员函数时，编译器将类的指针作为函数的 this 参数传递进去。
 举个栗子：
 
-```C++
+```cpp
 Student stu;
 stu.print(3);
 // 这时，编译器会将该句转换成
 stu.print(&stu, 3);
 ```
 
-#### **能不能在析构函数中`delete this`**
+#### **能不能在析构函数中 `delete this`**
 
-不能，因为`delete`一个指针，首先会调用构造函数，然后再释放空间，而析构函数中又会调用这一步，形成死循环。
+    不能，因为 delete 一个指针，首先会调用构造函数，然后再释放空间，而析构函数中又会调用这一步，形成死循环。
 
-```C++
+举个栗子：
+```cpp
 #include <iostream>
 using namespace std;
 class test
@@ -121,6 +123,19 @@ int main()
 </details>
 
 ###
+<b><details><summary>重载</summary></b>
+
+#### 不能重载的运算符
+```cpp
+ .*
+ ::
+ sizeof           // 这 5 个运算符不能重载
+ :
+ .
+```
+</details>
+
+###
 <b><details><summary>继承</summary></b>
 
 #### **重写、重载、重定义的区别**
@@ -142,6 +157,22 @@ int main()
 - **内联成员函数**，不一定，因为有可能直接展开没有地址。
 
 </details>
+
+## **动态内存管理**
+
+<b><details><summary>malloc realloc calloc</summary></b>
+
+</details>
+
+<b><details><summary>free</summary></b>
+
+</details>
+
+<b><details><summary>new</summary></b></details>
+
+<b><details><summary>delete</summary></b></details>
+
+<b><details><summary>定位 new</summary></b></details>
 
 ## **关键字**
 
@@ -177,8 +208,32 @@ int main()
 ## **STL**
 
 <b><details><summary>容器</summary></b>
+
+#### 序列式容器
+
+- array
+- string
+- vector
+- forward_list
+- list
+- deque
+
 #### 关联式容器
-#### 非关联式容器
+
+红黑树结构
+
+- map
+- multimap
+- set
+- multiset
+
+哈希结构
+
+- unordered_map
+- unordered_set
+- unordered_multimap
+- unordered_multiset
+
 </details>
 
 <b><details><summary>迭代器</summary></b>
@@ -198,6 +253,12 @@ int main()
 
 ## **C++11**
 
+### **列表初始化**
+
+### **范围 for**
+
+### **变量类型推导**
+
 ### **智能指针**
 
 <b><details><summary>auto_ptr</summary></b>
@@ -208,6 +269,16 @@ int main()
 
 <b><details><summary>shared_ptr</summary></b>
 </details>
+
+### **final 和 override**
+
+### **委派构造函数**
+
+### **右值引用**
+
+### **lambda 表达式**
+
+### **线程库**
 
 ## **设计模式**
 
