@@ -4,24 +4,41 @@
 
 [**系统工具**](#系统工具)
 
-[**高级 I/O**](#高级 io)
+[**系统编程**](#系统编程)
+
+[**高级 I/O**](#高级io)
 
 ## **系统指令**
 
 ## **系统工具**
 
-<b><details><summary>vim<summary></b>
+<b><details><summary>gdb</summary></b>
+
+#### gdb如何进行多线程调试
+
+
 
 </details>
 
-<b><details><summary>gdb<summary></b>
+## **系统编程**
 
-#### 1. 如何在 gdb 中进行多线程调试
-</details>
 
-<b><details><summary>makefile<summary></b>
+<b><details><summary>多进程</summary></b>
 
 </details>
+
+<b><details><summary>进程间通信</summary></b>
+
+</details>
+
+<b><details><summary>信号</summary></b>
+
+</details>
+
+<b><details><summary>多线程</summary></b>
+
+</details>
+
 
 ## **高级 I/O**
     任何 IO 过程中，都包含两个步骤。 第⼀步是等待，第⼆步是拷贝。而在实际的应用场景中，等待消耗的时间往往都远⾼于拷贝的时间。因此，要让 IO 更高效，最核⼼的办法就是让等待的时间尽量少。
@@ -52,12 +69,14 @@
 <b><details><summary>非阻塞IO</summary></b>
 #### **fcntl**
 
-```C++
+```cpp
 //函数原型
 #include <unistd.h>
 #include <fcntl.h>
 int fcntl(int fd, int cmd, ... /* arg */ );
 ```
+    fd: 需要管理的文件描述符
+    cmd: 执行的命令
 
 
 

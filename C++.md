@@ -130,7 +130,7 @@ int main()
  .*
  ::
  sizeof           // 这 5 个运算符不能重载
- :
+ ?:
  .
 ```
 </details>
@@ -287,7 +287,7 @@ int main()
 
 #### **饿汉模式**
 
-```c++
+```cpp
 // 饿汉模式
 // 程序启动时，就将对象创建好
 class Singleton1
@@ -321,7 +321,6 @@ private:
     // 不允许存在拷贝构造以及复制运算符重载
     Singleton1(const Singleton1&);
     Singleton1& operator=(const Singleton1&);
-
     static Singleton1* _singleton;
 };
 Singleton1* Singleton1::_singleton;
@@ -330,9 +329,8 @@ Singleton1::Free Singleton1::free;
 
 #### **懒汉模式**
 
-```c++
+```cpp
 #include <mutex>
-#include <thread>
 
 // 懒汉模式
 class Singleton2
@@ -369,7 +367,6 @@ public:
             }
         }
     };
-    static Free free;
 private:
     // 只能在类中调用构造函数，这样，加上控制条件后，只能创建一份了
     Singleton2()
@@ -377,16 +374,14 @@ private:
         std::cout << "Singleton2：" << this << std::endl;
     }
     Singleton2 (const Singleton2&);
-
     Singleton2& operator=(const Singleton2&);
-
     static volatile Singleton2* _p;
-    static mutex _m;
+    static std::mutex _m;
     static Free _free;
 };
 volatile Singleton2* Singleton2::_p = nullptr;
-mutex Singleton2::_m;
-Singleton2::Free Singleton2::free;
+std::mutex Singleton2::_m;
+Singleton2::Free Singleton2::_free;
 ```
 
 </details>
