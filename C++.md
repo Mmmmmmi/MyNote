@@ -168,7 +168,13 @@ int main()
 
 </details>
 
-<b><details><summary>new</summary></b></details>
+<b><details><summary>new</summary></b>
+new 会调用 operator new
+```cpp
+
+```
+
+</details>
 
 <b><details><summary>delete</summary></b></details>
 
