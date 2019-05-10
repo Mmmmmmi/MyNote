@@ -265,6 +265,8 @@ new 会调用 operator new
 
 ### **变量类型推导**
 
+### **类型转换**
+
 ### **智能指针**
 
 <b><details><summary>auto_ptr</summary></b>
