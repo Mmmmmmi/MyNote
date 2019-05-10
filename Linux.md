@@ -91,3 +91,7 @@ int fcntl(int fd, int cmd, ... /* arg */ );
 
 <b><details><summary>epoll</summary></b
 </details>
+
+
+<b><details><summary>比较</summary></b
+</details>
