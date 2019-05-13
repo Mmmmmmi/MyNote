@@ -89,9 +89,20 @@ int fcntl(int fd, int cmd, ... /* arg */ );
 <b><details><summary>poll</summary></b>
 </details>
 
-<b><details><summary>epoll</summary></b
+<b><details><summary>epoll</summary></b>
 </details>
 
-<b><details><summary>比较</summary></b
+<b><details><summary>比较</summary></b>
+
+| 系统调用 | select | poll | epoll |
+| ------- | ------- |------- | ------ |
+| 事件集合 | 用户通过 3 个参数分别传入需要监控的可读、可写及异常等事件，内核通过对这些参数的在线修改来反馈其中的就绪事件(将未就绪的事件从 fd_set 中剔除出去)，这使得用户每次调用 select 都需要重置这3个参数 | 统一处理所有事件类型，因此只需要一个事件集参数。用户通过 pollfd.events 传入需要监控的事件，内核通过修改 pollfd.revents 反馈其中就绪的事件 | 内核通过一个事件表直接管理用户监控的所有事件，因此每次调用 epoll_wait 时，无需反复传入需要监控的事件， epoll_wait 系统调用的参数 events 仅用 来反馈就绪的事件 |
+| 应用程序索引就绪文件<br/>描述符的时间复杂度 | O(n) | O(n) | O(1) |
+| 最大支持的文件描述符 | 一般有最大限制，取决于FD_SETSIZE<br/>这个宏，一般为1024 | 65535 | 65535 |
+| 工作模式 | LT | LT | 支持ET 高效模式 |
+| 内核实现和工作效率 | | ||
+
+
+
 
 </details>
