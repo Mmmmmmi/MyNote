@@ -7,7 +7,6 @@
 - [**设计模式**](#设计模式)
 ## **类和对象**
 
-###
 <b><details><summary>this 指针</summary></b>
 
 #### **`this` 指针什么时间产生**
@@ -51,7 +50,6 @@ int main()
 
 </details>
 
-###
 <b><details><summary>类大小</summary></b>
 
 ```c++
@@ -122,7 +120,6 @@ int main()
 
 </details>
 
-###
 <b><details><summary>重载</summary></b>
 
 #### 不能重载的运算符
@@ -146,7 +143,6 @@ int main()
 
 </details>
 
-###
 <b><details><summary>多态</summary></b>
 
 #### **类的那些函数不能被定义为虚函数？**
@@ -325,7 +321,6 @@ new 会调用 operator new
 
 ## **设计模式**
 
-###
 <b><details><summary>单例模式</summary></b>
 
 #### **饿汉模式**
@@ -429,5 +424,4 @@ Singleton2::Free Singleton2::_free;
 
 </details>
 
-###
 <b><details><summary>观察者模式</summary></b>
