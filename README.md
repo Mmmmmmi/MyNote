@@ -7,3 +7,5 @@
 # [计算机网络](https://github.com/Mmmmmmi/MyNote/blob/master/Net.md)
 
 # [DataBase](https://github.com/Mmmmmmi/MyNote/blob/master/DataBase.md)
+
+# [Python](https://github.com/Mmmmmmi/MyNote/blob/master/Python3.md)
