@@ -52,19 +52,52 @@
 
 #### **通过系统调用发送信号**
 
-- **`kill` 函数和 `raise`函数**
+- **`kill` 函数**，可以给一个指定的进程发送信号
 
   ```c++
   #include <sys/types.h>
   #include <signal.h>
-  //kill可以给一个指定的进程发送信号
   int kill(pid_t pid, int sig);
-  //raise可以给当前进程发送指定的信号
-  int raise(int signo);
   ```
 
-  简单示例
-  - 通过kill发送信号
+  - pid 指定目标进程
+
+    pid > 0   信号发给PID为pid的进程
+
+    pid = 0   信号发给本进程组内的其他进程
+
+    pid = -1  信号发给除init进程外的所有进程，但发送者需要有对目标进程发送信号的权限
+
+    pid < -1  信号发给组ID为-pid的进程组中的所有成员
+
+  - sig 指定信号
+
+    Linux定义的信号值都大于0， 如果 sig = 0 ，则 kill 函数不发任何信号。
+
+  - 返回值
+
+    0   函数成功
+
+    -1  函数失败，并设置errno
+
+        errno       含义
+
+        EINVAL   无效的信号
+
+        EPERM    该进程没有权限发送信号给任何一个目标进程
+
+        ESRCH    目标进程或进程组不存在
+
+
+
+- **`raise`函数**，可以给当前进程发送信号(给自己)
+  ```c++
+  #include <sys/types.h>
+  #include <signal.h>
+  int raise(int signo);
+  ```
+- **简单示例**
+  - 通过 `kill` 函数发送信号
   ```C++
   #include <iostream>
   #include <errno.h>
@@ -90,15 +123,18 @@
       {
           sleep(15);
           cout << "I am father , my pid is: " << getpid() << endl;
-          kill(pid, SIGQUIT);
+          kill(pid, SIGQUIT); //父进程向子进程发送SIGQUIT信号
       }
       return 0;
   }
+
   //运行结果
   I am child , my pid is: 22330
   I am father , my pid is: 22329
+
   //通过strace命令查看进程执行时的系统调用和接收到的信号
   sudo strace -p  22330&> a.txt
+
   //a.txt
   strace: Process 22330 attached
   restart_syscall(<... resuming interrupted nanosleep ...>) = 0
@@ -111,10 +147,11 @@
   nanosleep({tv_sec=10, tv_nsec=0}, {tv_sec=5, tv_nsec=312703}) = ? ERESTART_RESTARTBLOCK (Interrupted by signal)
   --- SIGQUIT {si_signo=SIGQUIT, si_code=SI_USER, si_pid=22329, si_uid=1003} ---
   +++ killed by SIGQUIT +++
+
   //在倒数第二行，接收到了来自父进程22329的信号SIGQUIT，子进程退出
   ```
 
-  - 通过raise发送信号
+  - 通过 `raise` 发送信号
 
   ```C++
   //2
