@@ -52,11 +52,7 @@
 
 #### **通过系统调用发送信号**
 
-<<<<<<< HEAD
 - **`kill` 函数和 `raise`函数**
-=======
-- `kill` 函数和 `raise`函数
->>>>>>> dc9650ff4628e84e29816d985a186e24a4c23dc4
 
   ```c++
   #include <sys/types.h>
@@ -67,19 +63,9 @@
   int raise(int signo);
   ```
 
-<<<<<<< HEAD
   简单示例
-  
   - **通过kill发送信号**
-  
   ```C++
-=======
-  
-  
-  ```C++
-  //简单示例
-  //1. 通过kill发送信号
->>>>>>> dc9650ff4628e84e29816d985a186e24a4c23dc4
   #include <iostream>
   #include <errno.h>
   #include <unistd.h>
@@ -126,20 +112,15 @@
   --- SIGQUIT {si_signo=SIGQUIT, si_code=SI_USER, si_pid=22329, si_uid=1003} ---
   +++ killed by SIGQUIT +++
   //在倒数第二行，接收到了来自父进程22329的信号SIGQUIT，子进程退出
-<<<<<<< HEAD
   ```
-  
+
   - **通过raise发送信号**
-  
+
   ```C++
   //2
-=======
-  
-  //2. 通过raise发送信号
->>>>>>> dc9650ff4628e84e29816d985a186e24a4c23dc4
   ```
-  
-  
+
+
 
 </details>
 
