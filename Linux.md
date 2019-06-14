@@ -33,6 +33,93 @@
 
 <b><details><summary>信号</summary></b>
 
+信号是由用户，系统或进程发送给目标进程的信息，以通知目标进程某个状态的转变或系统异常。
+
+### **信号的产生方式**
+- **对于前台进程，用户可以通过输入特殊终端字符来为它发送信号。** 比如输入`Ctrl + C`通常会给进程发送一个中断信号(SIGINT)，`Ctrl + Z`会发送`SIGTSTP`信号
+- **系统异常，** 比如非法内存访问
+- **系统状态变化，** 比如`alarm`定时器到期将引起`SIGALRM`信号
+- **运行kill命令或调用kill函数**
+
+### **发送信号**
+
+####  **通过按键发送信号**
+
+- `Ctrl + C` 发送 `SIGINT`
+- `Ctrl + Z` 发送 `SIGTSTP`
+- `Ctrl + \` 发送 `SIGQUIT`
+- ......
+
+#### **通过系统调用发送信号**
+
+- `kill` 函数和 `raise`函数
+
+  ```c++
+  #include <sys/types.h>
+  #include <signal.h>
+  //kill可以给一个指定的进程发送信号
+  int kill(pid_t pid, int sig);
+  //raise可以给当前进程发送指定的信号
+  int raise(int signo);
+  ```
+
+  
+  
+  ```C++
+  //简单示例
+  //1. 通过kill发送信号
+  #include <iostream>
+  #include <errno.h>
+  #include <unistd.h>
+  #include <sys/signal.h>
+  using namespace std;
+  int main()
+  {
+      int pid = fork();
+      if (pid < 0)
+      {
+          perror("error for fork");
+      }
+      else if (pid == 0)
+      {
+          while(1)
+          {
+              sleep(10);
+              cout << "I am child , my pid is: " << getpid() << endl;
+          }
+      }
+      else
+      {
+          sleep(15);
+          cout << "I am father , my pid is: " << getpid() << endl;
+          kill(pid, SIGQUIT);
+      }
+      return 0;
+  }
+  //运行结果
+  I am child , my pid is: 22330
+  I am father , my pid is: 22329
+  //通过strace命令查看进程执行时的系统调用和接收到的信号
+  sudo strace -p  22330&> a.txt
+  //a.txt
+  strace: Process 22330 attached
+  restart_syscall(<... resuming interrupted nanosleep ...>) = 0
+  fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 0), ...}) = 0
+  mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f759205d000
+  write(1, "I am child , my pid is: 22330\n", 30) = 30
+  rt_sigprocmask(SIG_BLOCK, [CHLD], [], 8) = 0
+  rt_sigaction(SIGCHLD, NULL, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
+  rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+  nanosleep({tv_sec=10, tv_nsec=0}, {tv_sec=5, tv_nsec=312703}) = ? ERESTART_RESTARTBLOCK (Interrupted by signal)
+  --- SIGQUIT {si_signo=SIGQUIT, si_code=SI_USER, si_pid=22329, si_uid=1003} ---
+  +++ killed by SIGQUIT +++
+  //在倒数第二行，接收到了来自父进程22329的信号SIGQUIT，子进程退出
+  
+  //2. 通过raise发送信号
+  ```
+  
+  
+
 </details>
 
 <b><details><summary>多线程</summary></b>
