@@ -3,14 +3,14 @@
 
    [**Redis**](#Redis)
 
-## **MySQL**
+## [**MySQL**](https://www.mysql.com/)
 ### **安装**
 
-- windows
+- **windows**
 
   1. 压缩包下载地址：<https://downloads.mysql.com/archives/community/>
      ![down](https://github.com/Mmmmmmi/MyNote/blob/master/resource/MySQLDown.png)
-  2. 下载完成后，将压缩包解压到解压到想安装的路径
+  2. 下载完成后，将压缩包解压到解压到想安装的路径。
      ![](https://github.com/Mmmmmmi/MyNote/blob/master/resource/MySQLPATH.png)
   3. 将该目录下的 bin 添加到系统 path 系统变量中，右键我的电脑（此电脑)-- 高级系统设置 -- 环境变量 -- 下面的系统变量（S）中的 path 变量 --- 编辑 -- 新建。
      ![](https://github.com/Mmmmmmi/MyNote/blob/master/resource/binpath.png)
@@ -25,7 +25,7 @@
   7. 输入` ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';`   `new password` 为新密码。输入完成后，退出（输入 quit)。
      ![](https://github.com/Mmmmmmi/MyNote/blob/master/resource/newpasswd.png)
   8. 重新登陆`mysql -u root -p`，这次输入新的密码登陆即可。
-- Centos 7
+- **Centos 7**
   1. 添加 Yum Repository
      ` wget -i -c http://dev.mysql.com/get/mysql80-community-release-el7-2.noarch.rpm`
      ` mysql57-community-release-el7-10.noarch.rpm` 是版本号，具体版本可以到
@@ -35,8 +35,8 @@
   3. 库安装完之后，开始安装`yum -y install mysql-community-server `
   4. 启动数据库服务，` systemctl start  mysqld.service`，查看状态 `systemctl status mysqld.service`
   5. 查看默认生成的`root`密码，` grep "password" /var/log/mysqld.log`
-  6. 登陆数据库，` mysql -uroot -p`，输入刚才的密码
-  7. 修改密码，` ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';`，` new password` 为新的密码
+  6. 登陆数据库，` mysql -uroot -p`，输入刚才的密码。
+  7. 修改密码，` ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';`，` new password` 为新的密码。
   8. 问题：可能由于依赖不足产生问题，可以尝试下面的命令移除对` mariadb-libs`：` yum -y remove mariadb-libs `
 
 ### **数据库操作**
@@ -63,7 +63,7 @@ use helloworld;
 ```
 - **创建数据库表**
 ```
-create table student(     id int,     name varchar(32),     gender varchar(2) );
+create table student(id int,name varchar(32),gender varchar(2));
 ```
 - **表中插入数据**
 ```
@@ -111,4 +111,33 @@ grant revoke commit
   - **隔离性（Isolation）**，隔离性是当多个用户并发访问数据库时，比如操作同一张表时，数据库为每一个用户开启的事务，不能被其他事务的操作所干扰，多个并发事务之间要相互隔离。即要达到这么一种效果：对于任意两个并发的事务 T1 和 T2，在事务 T1 看来，T2 要么在 T1 开始之前就已经结束，要么在 T1 结束之后才开始，这样每个事务都感觉不到有其他事务在并发地执行。
   - **持久性（Durability）**，持久性是指一个事务一旦被提交了，那么对数据库中的数据的改变就是永久性的，即便是在数据库系统遇到故障的情况下也不会丢失提交事务的操作。例如我们在使用 JDBC 操作数据库时，在提交事务方法后，提示用户事务操作完成，当我们程序执行完成直到看到提示后，就可以认定事务已经正确提交，即使这时候数据库出现了问题，也必须要将我们的事务完全执行完成，否则就会造成我们看到提示事务处理完毕，但是数据库因为故障而没有执行事务的重大错误。
 
-## **Redis**
+## [**Redis**](https://redis.io/)
+
+### **安装**
+- **Windows**
+   - 在GitHub上下载[压缩包](https://github.com/microsoftarchive/redis/releases)，这里使用的是压缩包的安装方法。
+   - 解压到指定文件夹，将该文件夹添加到环境变量。
+   - 打开powershell 输入`redis-server.exe`，显示运行即成功。如果没有添加环境变量，则需要从终端中进入文件夹，然后启动。
+- **Linux**
+  - **Centos 7**
+
+      其他版本的Centos系统，参考[官网](https://redis.io/download)。
+```c
+sudo yum install redis
+systemctl start redis  //centos7
+service redis start    //centos6及以下
+systemctl status redis //查看启动状态
+```
+### **配置**
+- **开启远程连接**
+   - **windows**
+
+      进入安装目录下，找到`redis.windows.conf`，打开，找到`bind 127.0.0.1` 修改为 `# bind 127.0.0.1` ，保存退出
+   - **Linux**
+```c
+sudo vim /etc/redis.conf
+//找到 bind 127.0.0.1 修改为下面
+# bind 127.0.0.1   //保存退出
+//重启服务
+service redis restart
+```
