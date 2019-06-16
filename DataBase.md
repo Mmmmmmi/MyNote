@@ -140,4 +140,9 @@ sudo vim /etc/redis.conf
 # bind 127.0.0.1   //保存退出
 //重启服务
 service redis restart
+//在终端输入
+ps -ef | grep redis
+//输出
+redis 16274 1 0 09:56 ?  00:00:01 /usr/bin/redis-server *:6379
+// * 表示允许所有的ip连接到本服务上
 ```
