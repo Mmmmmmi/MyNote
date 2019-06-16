@@ -81,11 +81,11 @@
     -1  函数失败，并设置errno
 
         errno       含义
-        
+    
         EINVAL   无效的信号
-        
+    
         EPERM    该进程没有权限发送信号给任何一个目标进程
-        
+    
         ESRCH    目标进程或进程组不存在
 
 
@@ -175,23 +175,23 @@ using namespace std;
       }
       return 0;
   }
-  
+
   // 运行结果
   my pid is: 25780
   Quit
-  
+
   //通过strace命令查看进程执行时的系统调用和接收到的信号
   sudo strace -p 25780 -o a.txt
-  
+
   //a.txt
   restart_syscall(<... resuming interrupted nanosleep ...>) = 0
   tgkill(25780, 25780, SIGQUIT)           = 0
   --- SIGQUIT {si_signo=SIGQUIT, si_code=SI_TKILL, si_pid=25780, si_uid=1003} ---
   +++ killed by SIGQUIT +++
-  
+
   //可以看到在倒数第二行，进程自己给自己发送了SIGQUIT信号
   ```
-
+ ### TODO
 </details>
 
 <b><details><summary>多线程</summary></b>
@@ -233,7 +233,7 @@ using namespace std;
 #include <unistd.h>
 #include <fcntl.h>
 int fcntl(int fd, int cmd, ... /* arg */ );
-  ```
+```
     fd: 需要管理的文件描述符
     cmd: 执行的命令
 
@@ -294,4 +294,7 @@ int fcntl(int fd, int cmd, ... /* arg */ );
 </table>
 
 </details>
+
+  ```
+
   ```
