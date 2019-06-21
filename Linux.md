@@ -254,10 +254,10 @@
 
 #### **信号在内核中的表示示意图**
 
-​	[sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct.png)
+​	![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct.png)
 
 
-### **5. 信号的处理**
+### **5. 信号的捕捉**
 
 进程收到一个信号，并不会立即处理，而是
 
