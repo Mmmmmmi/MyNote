@@ -251,8 +251,9 @@
 - 进程可以选择`阻塞(Block)`某个信号，被阻塞的信号产生时将保持在未决状态,直到进程解除对此信号的阻塞,才执行递达的动作
 - 注意，阻塞和忽略是不同的，只要信号被阻塞就不会递达，而忽略是在递达之后可选的一种处理动作
 
-
 #### **信号在内核中的表示示意图**
+
+​	![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct1.png)
 
 ​	![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct.png)
 
@@ -333,7 +334,6 @@ int fcntl(int fd, int cmd, ... /* arg */ );
 <b><details><summary>比较</summary></b>
 
 <table>
-
 <tr>
     <th width=14%>系统调用</th>
     <th width=29%>select</th>
