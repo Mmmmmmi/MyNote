@@ -257,6 +257,60 @@
 
 ​	![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct.png)
 
+<table>
+<tr>
+    <th width=30%>类型</th>
+    <th width=10%>字段</th>
+    <th width=60%>描述</th>
+</tr>
+<tr>
+    <td>struct signal_struct *</td>
+    <td> signal</td>
+    <td>指向进程的信号描述符的指针</td>
+</tr>
+<tr>
+    <td>struct signal_struct *</td>
+    <td>sighand</td>
+    <td>指向进程的信号处理程序描述符的指针</td>
+</tr>
+<tr>
+    <td>sigset_t</td>
+    <td>blocked/real_blocked</td>
+    <td>表示被阻塞信号的掩码，real_blocked表示临时掩码</td>
+</tr>
+<tr>
+    <td>struct sigpending</td>
+    <td>pending</td>
+    <td>存放私有挂起信号的数据结构</td>
+</tr>
+<tr>
+    <td>unsigned long</td>
+    <td>sas_ss_sp</td>
+    <td>信号处理程序备用堆栈的地址</td>
+</tr>
+<tr>
+    <td>size_t</td>
+    <td>sas_ss_size</td>
+    <td>信号处理程序备用堆栈的大小</td>
+</tr>
+<tr>
+    <td>int (*) (void *)</td>
+    <td>notifier</td>
+    <td>指向一个函数的指针，设备驱动程序用该函数阻塞进程的某些信号</td>
+</tr>
+<tr>
+    <td>void *</td>
+    <td>notifier_data</td>
+    <td>指向notifier函数(表中的前一个字段)，可能使用的数据</td>
+</tr>
+<tr>
+    <td>sigset_t *</td>
+    <td>notifier_mask</td>
+    <td>设备驱动程序通过notifier函数所阻塞的信号的位掩码</td>
+</tr>
+
+</table>
+
 
 ### **5. 信号的捕捉**
 
