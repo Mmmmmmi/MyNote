@@ -268,7 +268,7 @@
 - 进程可以选择`阻塞(Block)`某个信号，被阻塞的信号产生时将保持在未决状态,直到进程解除对此信号的阻塞,才执行递达的动作
 - 注意，阻塞和忽略是不同的，只要信号被阻塞就不会递达，而忽略是在递达之后可选的一种处理动作
 
-#### **信号在内核中的表示示意图**
+#### **信号相关的数据结构**
 
 ​	![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct1.png)
 
@@ -335,8 +335,6 @@ typedef struct {
 ```
 
 因为每个无符号长整数由`32`位组成，所以在Linux中可以声明的信号最大数是`64`(`_NSIG`宏表示这个值)。没有值为`0`的信号，因此，信号的编号对应于`sigset_t`类型变量中相应位下标加`1`
-
-​	![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct.png)
 
 `signal` 字段指向信号描述符(一个 ` signal_struct `类型的结构)，用来跟踪共享挂起信号。实际上，信号描述符还包括与信号处理关系并不密切的一些字段，如：每进程的资源限制数组 ` rlim ` ，分别用于存放进程的组领头进程和会话领头进程 ` PID ` 的字段 ` pgrp ` 和 ` session ` 。实际上，**信号描述符被属于同一线程组的所有进程共享 ，也就是被调用`clone() `系统调用创建的所有进程共享 ，因此，对属于同一线程组的每个进程而言，信号描述符中的字段必须都是相同的**
 
@@ -428,6 +426,8 @@ typedef struct {
 </table>
 
 描述符的count字段表示共享该结构的进程个数。**在一个POSIX的多线程应用中，线程组中的所有轻量级进程都引用相同的信号描述符和信号处理程序的描述符**
+
+![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct.png)
 
 ### **5. 信号的捕捉**
 
