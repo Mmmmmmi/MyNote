@@ -284,7 +284,7 @@
     <td>指向进程的信号描述符的指针</td>
 </tr>
 <tr>
-    <td>struct signal_struct *</td>
+    <td>struct sighand_struct *</td>
     <td>sighand</td>
     <td>指向进程的信号处理程序描述符的指针</td>
 </tr>
@@ -338,8 +338,96 @@ typedef struct {
 
 ​	![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct.png)
 
+`signal` 字段指向信号描述符(一个 ` signal_struct `类型的结构)，用来跟踪共享挂起信号。实际上，信号描述符还包括与信号处理关系并不密切的一些字段，如：每进程的资源限制数组 ` rlim ` ，分别用于存放进程的组领头进程和会话领头进程 ` PID ` 的字段 ` pgrp ` 和 ` session ` 。实际上，**信号描述符被属于同一线程组的所有进程共享 ，也就是被调用`clone() `系统调用创建的所有进程共享 ，因此，对属于同一线程组的每个进程而言，信号描述符中的字段必须都是相同的**
 
-`signal`字段指向信号描述符(一个signal_struct类型的结构)，用来跟踪共享挂起信号。实际上，信号描述符
+信号描述符中与信号处理有关的字段：
+
+<table>
+<tr>
+    <th width=30%>类型</th>
+    <th width=10%>字段</th>
+    <th width=60%>描述</th>
+</tr>
+<tr>
+    <td>atomic_t</td>
+    <td>count</td>
+    <td>信号描述符的使用计数器</td>
+</tr>
+<tr>
+    <td>atomic_t</td>
+    <td>live</td>
+    <td>线程组中的活动进程的数量</td>
+</tr>
+<tr>
+    <td>wait_queue_head_t</td>
+    <td>wait_chldexit</td>
+    <td>在系统调用wait4()中睡眠的进程的等待队列</td>
+</tr>
+<tr>
+    <td>struct task_struct *</td>
+    <td>curr_target</td>
+    <td>接收信号的线程组中最后一个进程的描述符</td>
+</tr>
+<tr>
+    <td>struct sigpending</td>
+    <td>shared_pending</td>
+    <td>存放共享挂起信号的数据结构</td>
+</tr>
+<tr>
+    <td>int</td>
+    <td>group_exit_code</td>
+    <td>线程组的进程终止代码</td>
+</tr>
+<tr>
+    <td>struct task_struct *</td>
+    <td>group_exit_task</td>
+    <td>在杀死整个线程组的时候使用</td>
+</tr>
+<tr>
+    <td>int</td>
+    <td>notify_count</td>
+    <td>在杀死整个线程组的时候使用</td>
+</tr>
+<tr>
+    <td>int</td>
+    <td>group_stop_count</td>
+    <td>在停止整个线程组的时候使用</td>
+</tr>
+<tr>
+   <td>unsigned int</td>
+   <td>flags</td>
+   <td>在传递修改进程状态的时候使用的标志</td>
+</tr>
+</table>
+
+`sighand`字段指向信号处理程序描述符(一个`sighand_struct`类型的结构)，描述每个信号必须怎样被线程组处理。**在调用clone()系统调用时，设置`CLONE_SIGHAND`标志，信号处理程序描述符就可以由几个进程共享**
+
+信号处理程序描述符的字段：
+
+<table>
+    <tr>
+    <th width=30%>类型</th>
+    <th width=10%>字段</th>
+    <th width=60%>描述</th>
+</tr>
+<tr>
+    <td>atomic_t</td>
+    <td>count</td>
+    <td>信号处理程序描述符的使用计数器</td>
+</tr>
+<tr>
+    <td>struct k_sigaction [64]</td>
+    <td>action</td>
+    <td>说明在所传递信号上执行操作的结构数组</td>
+</tr>
+<tr>
+    <td>spinlock_t</td>
+    <td>siglock</td>
+    <td>保护信号描述符和信号处理程序描述符的自旋锁</td>
+</tr>
+</table>
+
+描述符的count字段表示共享该结构的进程个数。**在一个POSIX的多线程应用中，线程组中的所有轻量级进程都引用相同的信号描述符和信号处理程序的描述符**
 
 ### **5. 信号的捕捉**
 
