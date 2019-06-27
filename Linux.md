@@ -427,6 +427,8 @@ typedef struct {
 
 描述符的count字段表示共享该结构的进程个数。**在一个POSIX的多线程应用中，线程组中的所有轻量级进程都引用相同的信号描述符和信号处理程序的描述符**
 
+信号在内核中的示意图
+
 ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct.png)
 
 ### **5. 信号的捕捉**
