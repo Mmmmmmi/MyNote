@@ -68,7 +68,7 @@
 
 #### **3.2 通过系统调用发送信号**
 
-- <b><details><summary>**`kill` 函数**，可以给一个指定的进程发送信号</summary></b>
+<b><details><summary>**`kill` 函数**，可以给一个指定的进程发送信号</summary></b>
 
   ```c++
   #include <signal.h>
@@ -105,7 +105,7 @@
 
 </details>
 
-- <b><details><summary>**`raise`函数**，可以给当前进程发送信号(给自己)</summary></b>
+<b><details><summary>**`raise`函数**，可以给当前进程发送信号(给自己)</summary></b>
 
   ```c++
   #include <signal.h>
@@ -120,7 +120,7 @@
     `-1` 失败
 </details>
 
-- <b><details><summary>**`alarm`函数**，在进程中设置一个定时器，当定时器指定的时间到时，它向进程发送 `SIGALRM` 信号</summary></b>
+<b><details><summary>**`alarm`函数**，在进程中设置一个定时器，当定时器指定的时间到时，它向进程发送 `SIGALRM` 信号</summary></b>
 
   ```c++
   #include <unistd.h>
@@ -137,8 +137,9 @@
 
 </details>
 
-- **简单示例**
-    <b><details><summary> 通过 `kill` 函数发送信号 </summary></b>
+**简单示例**
+
+<b><details><summary> 通过 `kill` 函数发送信号 </summary></b>
 
   ```C++
   #include <iostream>
@@ -192,9 +193,9 @@
   
   //在倒数第二行，接收到了来自父进程22329的信号SIGQUIT，子进程退出
   ```
-  </details>
+</details>
 
-    <b><details><summary>  通过 `raise` 发送信号 </summary></b>
+<b><details><summary>  通过 `raise` 发送信号 </summary></b>
   ```C++
   #include <iostream>
   #include <errno.h>
@@ -227,10 +228,10 @@
   
   //可以看到在倒数第二行，进程自己给自己发送了SIGQUIT信号
   ```
-    </details>
+</details>
 
   
-    <b><details><summary>  通过 `alarm` 发送信号 </summary></b>
+<b><details><summary>  通过 `alarm` 发送信号 </summary></b>
   ```c++
   #include <iostream>
   #include <unistd.h>
@@ -257,7 +258,7 @@
   1
   Alarm clock
   ```
-  </details>
+</details>
 
 ### **4 信号在内核中的表示**
 
@@ -433,7 +434,7 @@ typedef struct {
 </tr>
 </table>
 
-描述符的count字段表示共享该结构的进程个数。**在一个POSIX的多线程应用中，线程组中的所有轻量级进程都引用相同的信号描述符和信号处理程序的描述符**
+描述符的 `count` 字段表示共享该结构的进程个数。**在一个POSIX的多线程应用中，线程组中的所有轻量级进程都引用相同的信号描述符和信号处理程序的描述符**
 
 </details>
 
@@ -450,41 +451,104 @@ int sigfillset(sigset_t *set); 		/* 在信号集中设置所有信号 */
 int sigaddset (sigset_t *set, int signo); /* 将信号 _signo 添加至信号集中 */
 int sigdelset(sigset_t *set, int signo);  /* 将信号 _signo 从信号集中删除 */
 int sigismember（const sigset_t *set, int signo); /* 测试 _signo 是否在信号集中 */
-//在使用 sigset_t 之前，一定要调用 sigmptyset 或 sigfillset 做初始化，使信号集处于确定的状态。初始化 sigset_t 变量之后就可以再调用 sigaddset 和 sigdelset 在该信号集中添加或删除某种有效信号
-//前四个函数都是成功返回 0 ,出错返回 -1 。 sigismember 是一个布尔函数,用于判断一个信号集的有效信号中是否包含某种信号，若包含则返回 1 。不包含则返回 0 ，出错返回 -1
 ```
+在使用 `sigset_t` 之前，一定要调用 `sigmptyset` 或 `sigfillset` 做初始化，使信号集处于确定的状态。初始化 `sigset_t` 变量之后就可以再调用 `sigaddset` 和 `sigdelset` 在该信号集中添加或删除某种有效信号
+
+前四个函数都是成功返回 `0` ,出错返回 `-1` 。 `sigismember` 是一个布尔函数，用于判断一个信号集的有效信号中是否包含某种信号，若包含则返回 `1` 。不包含则返回 `0` ，出错返回 `-1`
 
 </details>
 
 <b><details><summary>进程信号掩码</summary></b>
 
+调用`sigprocmask`可以读取或更改进程的信号屏蔽字 (阻塞信号集)
+
+```c++
+#include <signal.h>
+int sigprocmask(int _how, sigset_t *_set, sigset_t *_oset);
+```
+
+
+
+`_set` 参数指定新的信号掩码，`_oset` 参数输出原来的信号掩码(如果不为  `NULL` )的话
+
+如果 `_set` 参数不为 `NULL`，则 `_how` 参数指定设置进程信号掩码的方式可为以下三种：
+
+<table>
+<tr>
+    <th width=20%>_how 参数</th>
+    <th width =80%>含义</th>
+</tr>
+ <tr>
+     <td> SIG_BLOCK </td>
+     <td> 新的进程信号掩码是其当前值和 _set 指定信号集的并集 </td>
+</tr>
+<tr>
+    <td> SIG_UNBLOCK </td>
+    <td> 新的进程信号掩码是其当前值和 ~_set 信号集的交集，因此 _set 指定的信号集将不被屏蔽 </td>
+</tr>
+<tr>
+    <td> SIG_SETMASK </td>
+    <td> 直接将进程信号掩码设置为 _set </td>
+</tr>
+</table>
+
+如果 `_set` 为 `NULL`，则进程信号掩码不变，此时我们仍然可以利用 `_oset` 参数来获得进程当前的信号掩码
+
+sigprocmask 成功时返回 `0` ，失败返回 `-1` 并设置  `errno` 
+
 </details>
-
-
-
-
 
 <b><details><summary>被挂起的信号</summary></b>
 
+设置进程信号掩码之后，被屏蔽的信号将不能再被进程接收。如果给进程发送一个被屏蔽的信号，则操作系统将给该信号设置为进程的一个被挂起的信号(未决状态)。如果我们取消对被挂起信号的屏蔽，则它能立即被进程接收到。
+
+```c++
+#include <signal.h>
+int sigpending(sigset_t * set)
+```
+
+`set`  用于保存被挂起的信号集。如果进程多次接收到同一个被挂起的信号，`sigpending` 函数也只能反映一次。并且当我们再次使用 `sigprocmask` 使能该挂起信号时，该信号的处理函数也只能被触发一次
+
+`sigpending` 成功时，返回 `0`  ，失败时返回 `-1` 并设置 `errno` 
+
 </details>
+
+### **6. 信号的处理流程**
+
+对于一个完整的信号生命周期(从信号发送到相应的处理函数执行完毕)来说，可以分为三个阶段：
+
+- <b><details><summary>信号产生</summary></b>
+
+    </details>
+
+- <b><details><summary>信号在进程中注册</summary></b>
+
+    </details>
+
+- <b><details><summary>信号的执行和注销</summary></b>
+
+    </details>
+
+
 
 
 
 ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct.png)
 
-每个信号都有两个标志位分别表示阻塞 (`block`) 和未决 (`pending`) ，还有一个函数指针表示处理动作。信号产生时，内核在进程控制块中设置该信号的未决标志，直到信号递达才清除该标志。在上图中, `SIGHUP`信号未阻塞也未产生过，当它递达时执⾏行默认处理动作。 `SIGINT`信号产⽣生过，但正在被阻塞，所以暂时不能递达。虽然它的处理动作是忽略，但在没有解除阻塞之前不能忽略这个信号，因为进程仍有机会改变处理动作之后再解除阻塞。 `SIGQUIT`信号未产生过,一旦产生`SIGQUIT`信号将被阻塞，它的处理动作是用户自定义函数`sighandler`。
+每个信号都有两个标志位分别表示阻塞 (`block`) 和未决 (`pending`) ，还有一个函数指针表示处理动作。信号产生时，内核在进程控制块中设置该信号的未决标志，直到信号递达才清除该标志。在上图中, `SIGHUP`信号未阻塞也未产生过，当它递达时执⾏行默认处理动作。 `SIGINT`信号产⽣生过，但正在被阻塞，所以暂时不能递达。虽然它的处理动作是忽略，但在没有解除阻塞之前不能忽略这个信号，因为进程仍有机会改变处理动作之后再解除阻塞。 `SIGQUIT`信号未产生过,一旦产生`SIGQUIT`信号将被阻塞，它的处理动作是用户自定义函数`sighandler`
 
-如果在进程解除对某信号的阻塞之前这种信号产生过多次，那么等阻塞接触和，该如何处理呢？具体的过程在下面会说到。
-
-### **6. 信号的捕捉**
-
-进程收到一个信号，并不会立即处理，而是
+### **7. 信号的捕捉**
 
 信号常见的处理方法有以下三种：
 
 - **忽略信号**，大多数信号都可使用这种方式进行处理，但有两种信号却决不能被忽略。它们是：`SIGKILL` 和 `SIGSTOP` 。这两种信号不能被忽略的，原因是：它们向超级用户提供一种使进程终止或停止的可靠方法。另外，如果忽略某些由硬件异常产生的信号（例如非法存储访问或除以0），则进程的行为是未定义的
 - **默认方式**，对大多数信号的系统默认动作是终止该进程
 - **自定义方式捕捉信号**， 提供一个信号处理函数,要求内核在处理该信号时切换到用户态执行这个处理函数,这种方式称为捕捉(Catch)一个信号。注意，不能捕捉`SIGKILL`和`SIGSTOP`信号
+
+
+
+
+
 
 </details>
 
