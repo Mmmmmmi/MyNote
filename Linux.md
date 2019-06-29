@@ -74,33 +74,33 @@
   #include <signal.h>
   int kill(pid_t pid, int sig);
   ```
-  
+
     - `pid` 指定目标进程
     
         `pid > 0 `   信号发给PID为`pid`的进程
-  
+      
         `pid = 0`   信号发给本进程组内的其他进程
-  
+      
         `pid = -1`  信号发给除init进程外的所有进程，但发送者需要有对目标进程发送信号的权限
-  
+      
         `pid < -1`  信号发给组ID为`-pid`的进程组中的所有成员
-  
+      
     - `sig` 指定信号
-  
+      
         Linux定义的信号值都大于`0`， 如果 `sig = 0` ，则 kill 函数不发任何信号
-  
+      
     - 返回值
-  
+      
         `0`   函数成功
-  
+      
         `-1`  函数失败，并设置`errno`
-
+    
         `errno`含义：
-
+    
         `EINVAL`   无效的信号
-
+    
         `EPERM`    该进程没有权限发送信号给任何一个目标进程
-
+    
         `ESRCH`    目标进程或进程组不存在
 
 </details>
@@ -230,7 +230,7 @@
   ```
 </details>
 
-  
+
 <b><details><summary>  通过 `alarm` 发送信号 </summary></b>
   ```c++
   #include <iostream>
@@ -518,6 +518,8 @@ int sigpending(sigset_t * set)
 对于一个完整的信号生命周期(从信号发送到相应的处理函数执行完毕)来说，可以分为三个阶段：
 
 - <b><details><summary>信号产生</summary></b>
+
+    即上面介绍到的`2` ，`3`点
 
     </details>
 
