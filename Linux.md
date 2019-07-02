@@ -95,31 +95,31 @@
   ```
 
     - `pid` 指定目标进程
-    
+
         `pid > 0 `   信号发给PID为`pid`的进程
-      
+
         `pid = 0`   信号发给本进程组内的其他进程
-      
+
         `pid = -1`  信号发给除init进程外的所有进程，但发送者需要有对目标进程发送信号的权限
-      
+
         `pid < -1`  信号发给组ID为`-pid`的进程组中的所有成员
-      
+
     - `sig` 指定信号
-      
+
         Linux定义的信号值都大于`0`， 如果 `sig = 0` ，则 kill 函数不发任何信号
-      
+
     - 返回值
-      
+
         `0`   函数成功
-      
+
         `-1`  函数失败，并设置`errno`
-    
+
         `errno`含义：
-    
+
         `EINVAL`   无效的信号
-    
+
         `EPERM`    该进程没有权限发送信号给任何一个目标进程
-    
+
         `ESRCH`    目标进程或进程组不存在
 
 </details>
@@ -189,14 +189,14 @@
       }
       return 0;
   }
-  
+
   //运行结果
   I am child , my pid is: 22330
   I am father , my pid is: 22329
-  
+
   //通过strace命令查看进程执行时的系统调用和接收到的信号
   sudo strace -p  22330 > a.txt
-  
+
   //a.txt
   strace: Process 22330 attached
   restart_syscall(<... resuming interrupted nanosleep ...>) = 0
@@ -209,7 +209,7 @@
   nanosleep({tv_sec=10, tv_nsec=0}, {tv_sec=5, tv_nsec=312703}) = ? ERESTART_RESTARTBLOCK (Interrupted by signal)
   --- SIGQUIT {si_signo=SIGQUIT, si_code=SI_USER, si_pid=22329, si_uid=1003} ---
   +++ killed by SIGQUIT +++
-  
+
   //在倒数第二行，接收到了来自父进程22329的信号SIGQUIT，子进程退出
   ```
 </details>
@@ -231,20 +231,20 @@
       }
       return 0;
   }
-  
+
   // 运行结果
   my pid is: 25780
   Quit
-  
+
   //通过strace命令查看进程执行时的系统调用和接收到的信号
   sudo strace -p 25780 -o a.txt
-  
+
   //a.txt
   restart_syscall(<... resuming interrupted nanosleep ...>) = 0
   tgkill(25780, 25780, SIGQUIT)           = 0
   --- SIGQUIT {si_signo=SIGQUIT, si_code=SI_TKILL, si_pid=25780, si_uid=1003} ---
   +++ killed by SIGQUIT +++
-  
+
   //可以看到在倒数第二行，进程自己给自己发送了SIGQUIT信号
   ```
 </details>
@@ -268,7 +268,7 @@
       }
       return 0;
   }
-  
+
   //运行结果
   5
   4
@@ -636,22 +636,23 @@ return 1;
 
 信号处理程序是用户态进程定义的函数，并包含在用户态的代码段中。`handle_signal()` 函数运行在内核态，而信号处理程序运行在用户态，这就意味着在当前进程恢复 “正常” 执行之前，它必须首先执行用户态的信号处理程序。此外，当内核打算恢复进程的正常执行时，内核态堆栈不再包含被中断程序的硬件上下文，因为每当从内核态向用户态转换时，内核态堆栈都被清空。同时，因为信号处理程序可以调用系统调用，在这种情况下，执行了系统调用的服务例程后，控制权必须返回到信号处理程序而不是被中断程序的正常代码流
 
-` Linux ` 采用的解决方法是把保存在内核态堆栈中的硬件上下文拷贝到当前进程的用户态堆栈中。用户态堆栈也以这样的方式被修改，即当信号处理程序终止时，自动调用 `  sigreturn()` 系统调用把这个硬件上下文拷贝回到内核态堆栈中，并恢复用户态堆栈中原来的内容 
+` Linux ` 采用的解决方法是把保存在内核态堆栈中的硬件上下文拷贝到当前进程的用户态堆栈中。用户态堆栈也以这样的方式被修改，即当信号处理程序终止时，自动调用 `  sigreturn()` 系统调用把这个硬件上下文拷贝回到内核态堆栈中，并恢复用户态堆栈中原来的内容
 
-当中断、异常或系统调用发生时，进程切换到内核态，在返回用户态前，内核执行 ` do_signal() `函数，这个函数又依次处理信号（通过调用 ` handle_signal() ` ）和 建立用户态堆栈 （通过调用 `  setup_frame()` 或 `setup_rt_frame()` ）。当进程又切换到用户态时，因为信号处理程序的起始地址被强制放入程序计数器中，因此开始执行信号处理程序。当处理程序终止时，`setup_frame()` 或 `setup_rt_frame()` 函数放在用户态堆栈中的返回代码就被执行。这个代码调用 `  sigreturn()` 或 `rt_sigreturn()` 系统调用，相应的服务例程将正常程序的用户态堆栈硬件上下文拷贝到内核态堆栈，并把用户态堆栈恢复到它原来的状态（通过调用  `  restore_sigcontext()` ）。当这个系统调用结束时，普通进程就因此能恢复自己的执行  
+当中断、异常或系统调用发生时，进程切换到内核态，在返回用户态前，内核执行 ` do_signal() `函数，这个函数又依次处理信号（通过调用 ` handle_signal() ` ）和 建立用户态堆栈 （通过调用 `  setup_frame()` 或 `setup_rt_frame()` ）。当进程又切换到用户态时，因为信号处理程序的起始地址被强制放入程序计数器中，因此开始执行信号处理程序。当处理程序终止时，`setup_frame()` 或 `setup_rt_frame()` 函数放在用户态堆栈中的返回代码就被执行。这个代码调用 `  sigreturn()` 或 `rt_sigreturn()` 系统调用，相应的服务例程将正常程序的用户态堆栈硬件上下文拷贝到内核态堆栈，并把用户态堆栈恢复到它原来的状态（通过调用  `  restore_sigcontext()` ）。当这个系统调用结束时，普通进程就因此能恢复自己的执行
 
 <b><details><summary> `  signal` 系统调用</summary></b>
 
 ```c++
 #include <signal.h>
-
+typedef void (*sighandler_t)(int);
+sighandler_t signal(int signum, sighandler_t handler);
 ```
 
 
 
 </details>
 
-<b><details><summary> `  signal` 系统调用</summary></b>
+<b><details><summary> `  sigaction` 系统调用</summary></b>
 
 </details>
 
@@ -764,7 +765,3 @@ int fcntl(int fd, int cmd, ... /* arg */ );
 </table>
 
 </details>
-
-  ```
-
-  ```
