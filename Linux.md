@@ -56,7 +56,7 @@
 
 <b><details><summary>与时间关系上：**实时信号**与 **非实时信号**</summary></b>
 
-早期 `Unix` 系统只定义了 `32` 种信号，前 `32` 种信号已经有了预定义值，每个信号有了确定的用途及含义，并且每种信号都有各自的缺省动作。如按键盘的 `CTRL ^C` 时，会产生 `SIGINT` 信号，对该信号的默认反应就是进程终止。后`32` 个信号表示实时信号，等同于前面阐述的可靠信号。这保证了发送的多个实时信号都被接收。
+早期 `Unix` 系统只定义了 `32` 种信号，前 `32` 种信号已经有了预定义值，每个信号有了确定的用途及含义，并且每种信号都有各自的缺省动作。如按键盘的 `CTRL ^C` 时，会产生 `SIGINT` 信号，对该信号的默认反应就是进程终止。后`32` 个信号表示**实时信号**，等同于前面阐述的可靠信号。这保证了发送的多个实时信号都被接收。
 
 **非实时信号都不支持排队，都是不可靠信号；实时信号都支持排队，都是可靠信号。**
 </details>
@@ -95,31 +95,31 @@
   ```
 
     - `pid` 指定目标进程
-
+    
         `pid > 0 `   信号发给PID为`pid`的进程
-
+    
         `pid = 0`   信号发给本进程组内的其他进程
-
+    
         `pid = -1`  信号发给除init进程外的所有进程，但发送者需要有对目标进程发送信号的权限
-
+    
         `pid < -1`  信号发给组ID为`-pid`的进程组中的所有成员
-
+    
     - `sig` 指定信号
-
+    
         Linux定义的信号值都大于`0`， 如果 `sig = 0` ，则 kill 函数不发任何信号
-
+    
     - 返回值
-
+    
         `0`   函数成功
-
+    
         `-1`  函数失败，并设置`errno`
-
+    
         `errno`含义：
-
+    
         `EINVAL`   无效的信号
-
+    
         `EPERM`    该进程没有权限发送信号给任何一个目标进程
-
+    
         `ESRCH`    目标进程或进程组不存在
 
 </details>
@@ -532,7 +532,7 @@ int sigpending(sigset_t * set)
 
 ### **6. 信号的处理流程**
 
-对于一个完整的信号生命周期(从信号发送到相应的处理函数执行完毕)来说，可以分为三个阶段：
+对于一个完整的信号生命周期(从信号发送到相应的处理函数执行完毕)来说，可以分为三个阶段：**信号产生** ， **信号在进程中注册** ，**信号的执行和注销**
 
 <b><details><summary>信号产生</summary></b>
 
@@ -621,6 +621,8 @@ struct sigqueue{
 
 ### **8. 信号的捕捉**
 
+<b><details><summary>信号捕获过程</summary></b>
+
 ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/do_signal.png)
 
 如果信号有一个专门的处理程序（**信号处理程序**），`do_signal()` 函数就必须强迫该处理程序执行。这是通过 `handle_signal()` 进行的：
@@ -640,6 +642,8 @@ return 1;
 
 当中断、异常或系统调用发生时，进程切换到内核态，在返回用户态前，内核执行 ` do_signal() `函数，这个函数又依次处理信号（通过调用 ` handle_signal() ` ）和 建立用户态堆栈 （通过调用 `  setup_frame()` 或 `setup_rt_frame()` ）。当进程又切换到用户态时，因为信号处理程序的起始地址被强制放入程序计数器中，因此开始执行信号处理程序。当处理程序终止时，`setup_frame()` 或 `setup_rt_frame()` 函数放在用户态堆栈中的返回代码就被执行。这个代码调用 `  sigreturn()` 或 `rt_sigreturn()` 系统调用，相应的服务例程将正常程序的用户态堆栈硬件上下文拷贝到内核态堆栈，并把用户态堆栈恢复到它原来的状态（通过调用  `  restore_sigcontext()` ）。当这个系统调用结束时，普通进程就因此能恢复自己的执行
 
+</details>
+
 <b><details><summary> `  signal` 系统调用</summary></b>
 
 ```c++
@@ -648,17 +652,95 @@ typedef void (*sighandler_t)(int);
 sighandler_t signal(int signum, sighandler_t handler);
 ```
 
+`sighandler_t` 除了指向自定义的信号处理函数之外，`bits/signum.h` 头文件中还定义了信号的两种其他处理方式 `SIG_IGN` 和 `SIG_DEL`
 
+```c++
+#include <bits/signum.h>
+#define SIG_DFL ((sighandler_t) 0)	//默认处理方式 前面7介绍到
+#define SIG_IGN ((sighandler_t) 1)	//忽略信号
+```
+
+`signum` 参数指定要捕获的信号类型
+
+`_handler` 参数是 `sighandler_t` 类型的函数指针，用于指定信号 `sig` 的处理函数
+
+`signal` 函数成功调用时返回一个函数指针，该函数指针类型也是  `sighandler_t`  。这个返回值是前一次调用 `signal` 函数时传入的函数指针，或者是信号 `  sig` 对应的默认处理函数指针 ` SIG_DEF` （如果是第一次调用 `signal`的话 ）
+
+`signal` 系统调用出错时返回 `SIG_ERR`，并设置 `errno` 
 
 </details>
 
 <b><details><summary> `  sigaction` 系统调用</summary></b>
 
+```c++
+#include <signal.h>
+int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);
+```
+
+`signum` 参数指定要捕获的信号类型
+
+`act` 参数指定新的信号处理方式
+
+`oact` 参数输出信号先前的处理方式（如果不为 `NULL` 的话）
+
+`act` 和 `oact` 都是 `sigaction` 结构体类型的指针，`sigaction` 结构体描述了信号处理的细节，其结构如下：
+
+```c++
+struct sigaction {
+    void     (*sa_handler)(int);
+	void     (*sa_sigaction)(int, siginfo_t *, void *);
+	sigset_t   sa_mask;
+	int        sa_flags;
+	void     (*sa_restorer)(void);
+};
+```
+
+`sa_handler` 成员指定信号处理函数
+
+`sa_mask` 成员设定信号掩码（准确地说是在原有信号掩码的基础上增加信号掩码），以指定哪些信号不能发送给本进程
+
+`sa_mask` 是信号集`sigset_t` 类型，前面已经介绍过
+
+`sa_flag` 设置程序收到信号时的行为，其可选值如下：
+
+<table>
+    <tr>
+        <th width=25%>选项</th>
+        <th width=75%>含义</th>
+    </tr>
+    <tr>
+        <td>SA_NOCLDSTOP</td>
+        <td>如果 sigaction 的 signum 参数是 SIGCHLD ，则设置该标志表示子进程暂停时不生成 SIGCHLD 信号 </td>
+    </tr>
+    <tr>
+        <td>SA_NOCLDWAIT</td>
+        <td>如果 sigaction 的 signum 参数是 SIGCHLD ，则设置该标志表示子进程结束时不产生僵尸进程</td>
+    </tr>
+    <tr>
+        <td>SA_NODEFER</td>
+        <td>当接收到信号并进入其信号处理函数时，不屏蔽该信号。默认情况下，我们期望进程在处理一个信号时不再接收到同种信号，否则将引起一些竞态条件</td>
+    </tr>
+    <tr>
+        <td>SA_ONSTACK</td>
+        <td>调用 sigltstack 函数设置的可选信号栈上的信号处理函数</td>
+    </tr>
+    <tr>
+        <td>SA_RESETHAND</td>
+        <td>信号处理函数执行完毕后，恢复信号的默认处理方式</td>
+    </tr>
+    <tr>
+        <td>SA_RESTART</td>
+        <td>重新调用该信号终止的系统调用</td>
+    </tr>
+</table>
+
+`sa_restorer` 成员已经过时，一般不使用
+
+`sigaction` 成功时返回 `0`，失败时则返回 `-1`，并设置 `errno`
+
 </details>
 
 <b><details><summary>  示例 </summary></b>
-
-
 
 
 ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/sig_struct.png)
