@@ -334,9 +334,9 @@ class Singleton1
 public:
     static Singleton1* getSingleton1()
     {
-        _singleton = new Singleton1();
         return _singleton;
     }
+    //Free类在进程结束时自动销毁，在它的析构函数中 delete 掉了 _singleton 
     class Free
     {
     public:
@@ -362,7 +362,7 @@ private:
     Singleton1& operator=(const Singleton1&);
     static Singleton1* _singleton;
 };
-Singleton1* Singleton1::_singleton;
+Singleton1* Singleton1::_singleton = new Singleton1();
 Singleton1::Free Singleton1::free;
 ```
 
