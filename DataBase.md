@@ -47,39 +47,6 @@
 
 ### **数据库相关知识**
 
-- <b><details><summary>**基本操作** </summary></b>
-
-   ```sql
-   # 连接服务器
-   mysql -h 127.0.0.1 -P 3306  -u root -p
-
-   # 初次登陆修改密码
-   ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
-
-   # 创建数据库
-   create database helloworld;
-
-   # 选择数据库
-   use helloworld;
-
-   # 创建数据库表
-   create table student(id int,name varchar(32),gender varchar(2));
-
-   # 表中插入数据
-   insert into student (id, name, gender) values (1, '张三', '男'); insert into student (id, name, gender) values (2, '李四', '女'); insert into student (id, name, gender) values (3, '王五', '男');
-
-   # 批量插入数据
-   insert into student (id, name, gender) values (3, '王五', '男'),(4, '王麻子', '男'));
-
-   # 查询表中的数据
-   select * from student;
-
-   # 查看引擎
-   show engines;
-
-   ```
-   </details>
-
 - <b><details><summary>**SQL 分类** </summary></b>
 
    **数据库定义语言 (Data Define Language，DDL)**
@@ -102,7 +69,69 @@
    grant revoke commit
    ```
 
-</details>
+   </details>
+
+- <b><details><summary>**基本操作** </summary></b>
+
+   ```sql
+   # 连接服务器
+   mysql -h 127.0.0.1 -P 3306  -u root -p
+
+   # 初次登陆修改密码
+   ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
+
+   # 创建数据库
+   create database helloworld;
+
+   # 选择数据库
+   use helloworld;
+
+   # 查看引擎
+   show engines;
+
+   # 创建数据库表
+   create table student(id int,name varchar(32),gender varchar(2));
+
+   # 表中插入数据
+   insert into student (id, name, gender) values (1, '张三', '男'); insert into student (id, name, gender) values (2, '李四', '女'); insert into student (id, name, gender) values (3, '王五', '男');
+
+   # 批量插入数据
+   insert into student (id, name, gender) values (3, '王五', '男'),(4, '王麻子', '男'));
+
+   # 查询表中的数据
+   select * from student;
+
+   # 连接相关操作
+   
+   - INNER JOIN（内连接,或等值连接）: 获取两个表中字段匹配关系的记录。
+
+   - LEFT JOIN（左连接）: 获取左表所有记录，即使右表没有对应匹配的记录。左连接
+
+   - RIGHT JOIN（右连接）: 与 LEFT JOIN 相反，用于获取右表所有记录，即使左表没有对应匹配的记录。
+
+   # MySQL 分组
+
+   - GROUP BY ： 可以根据一个或者多个列对结果集分组，在分组的列上可以使用 COUNT ， SUM ， AVG 等函数
+   SELECT * 
+   FROM Student
+   GROUP BY Student_Name
+   
+
+
+
+
+   ```
+   </details>
+
+- <b><details><summary>**MySQL 相关函数** </summary></b>
+   ```sql
+
+   # IFNULL(v1, v2)   如果 v1 的值不为 NULL，则返回 v1 ，否则返回 v2
+   select IFNULL(NULL, "Hello World");  ----->  Hello World 
+
+   ```
+   </details>
+
 
 - <b><details><summary>**事务** </summary></b>
 
