@@ -134,6 +134,11 @@
 - <b><details><summary>**MySQL 相关函数** </summary></b>
    ```sql
 
+   # not in
+
+   # <>
+
+   # distinct
 
    # IF(expr, v1, v2)   如果表达式 expr 成立, 返回结果 v1, 否则返回 v2
    SELECT IF(1 > 0, "True", "False"); -------> True
