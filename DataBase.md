@@ -119,13 +119,15 @@
    # MySQL 排序
 
    - ORDER BY ：如果需要对读取的数据进行排序，可以使用 MySQL 的 ORDER BY 子句来设定按哪个字段哪种方式来进行排序，再返回搜索结果。
-   - 可以使用任何字段来作为排序的条件，从而返回排序后的查询结果。
-   - 可以设定多个字段来排序。
-   - 可以使用 ASC 或 DESC 关键字来设置查询结果是按升序或降序排列。 默认情况下，它是按升序排列。
-   - 可以添加 WHERE...LIKE 子句来设置条件。
+   /*
+    可以使用任何字段来作为排序的条件，从而返回排序后的查询结果。
+    可以设定多个字段来排序。
+    可以使用 ASC 或 DESC 关键字来设置查询结果是按升序或降序排列。 默认情况下，它是按升序排列。
+    可以添加 WHERE...LIKE 子句来设置条件。
+   */
    SELECT TMP1, TMP2
    FROM TableName;
-   ORDER BY TMP! [ASC [DESC][默认 ASC]]]
+   ORDER BY TMP [ASC [DESC][默认 ASC]]]
 
 
    ```
@@ -134,18 +136,39 @@
 - <b><details><summary>**MySQL 相关函数** </summary></b>
    ```sql
 
-   # not in
+   /*
+    CASE expression
+        WHEN condition1 THEN result1
+        WHEN condition2 THEN result2
+        ...
+        WHEN conditionN THEN resultN
+        ELSE result
+    END
 
-   # <>
-
-   # distinct
+    CASE 表示函数开始 END 表示函数结束
+    如果 condition1 成立，则返回 result1
+    如果 condition2 成立，则返回 result2
+    当全部不成立，则返回 result
+    当有一个成立之后，后面的就都不执行了
+   */
+   SELECT
+    CASE
+      WHEN 1 > 0 THEN '1 > 0'
+      WHEN 2 > 0 THEN '2 > 0'
+      WHEN 3 > 0 THEN '3 > 0'
+      ELSE 'ELSE'
+    END   --------> 1 > 0
 
    # IF(expr, v1, v2)   如果表达式 expr 成立, 返回结果 v1, 否则返回 v2
    SELECT IF(1 > 0, "True", "False"); -------> True
    SELECT IF(0 > 1, "True", "False"); -------> False
 
-   # IFNULL(v1, v2)   如果 v1 的值不为 NULL，则返回 v1 ，否则返回 v2
-   select IFNULL(NULL, "Hello World");  ----->  Hello World
+   # IFNULL(v1, v2)  如果 v1 的值不为 NULL，则返回 v1 ，否则返回 v2
+   SELECT IFNULL(NULL, "Hello World");  ----->  Hello World
+
+   # MOD(x, y)    返回 x 除以 y 以后的余数
+   SELECT MOD(5, 2);   ------> 1
+
 
    ```
    </details>
