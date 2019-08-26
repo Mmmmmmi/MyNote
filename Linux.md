@@ -553,7 +553,7 @@ struct sigpending{
 };
 ```
 
-`head` 和 `tail` 分别指向一个 `sigqueue` 类型的结构链（称之为 **未决信号信息链** ）的首尾，信息链中的每个 sigqueue` 结构刻画一个特定信号所携带的信息，并指向下一个 ` sigqueue ` 结构
+`head` 和 `tail` 分别指向一个 `sigqueue` 类型的结构链（称之为 **未决信号信息链** ）的首尾，信息链中的每个 `sigqueue` 结构刻画一个特定信号所携带的信息，并指向下一个 `sigqueue` 结构
 
 ```c++
 struct sigqueue{
