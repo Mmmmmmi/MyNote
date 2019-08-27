@@ -12,9 +12,89 @@
 
 # **系统工具**
 
-## **gdb**
+## **gcc 创建静态库与动态库**
 
-**gdb如何进行多线程调试**
+<details><summary><b>静态库</b></summary>
+
+**命名规则**，由三部分组成：`libxxx.a` 其中 `xxx` 为库的名字
+
+**创建步骤**
+```c++
+//1. 源代码( c, cpp)，例如 test.cc
+//2. 生成对应的obj文件(.o)
+g++ -c test.cpp -o test.o
+//3. 打包，用到 ar
+ar rcs libtest.a test.o
+//4. 查看静态库内容
+nm libtest.a
+```
+
+**使用方法**
+```c++
+g++ main.cc -I ./ -L./ -ltest -o main
+//-L  指定库的路径
+//-l  指定库的名字(掐头去尾)
+//-I  指定头文件的路径
+//-o  指引生成文件的名字
+```
+
+`Linux` 的 `gcc` 默认链接动态库，当动态库不存在时才会去链接静态库，若是需要强制指定静态库，需要加指定选项`-static`
+
+</details>
+
+<details><summary><b>动态库</b></summary>
+
+**命名规则**，由三部分组成：`libxxx.so` 其中 `xxx` 为库的名字
+
+**创建步骤**
+```c++
+//1. 源代码( c, cpp)，例如 test.cc
+//2. 生成对应的obj文件(.o)
+g++ -c test.cpp -fPIC -o test.o
+//3. 打包
+g++ -shared test.o -o libtest.a
+//4. 也可以2 3 一起执行
+g++ -shared -fPIC test.c -o libtest.so
+//5. 也可用nm 查看，不过与静态库区别较大
+nm libtest.so
+```
+
+**使用方法**
+
+```c++
+g++ main.cc -I ./ -L./ -ltest -o main
+//-L  指定库的路径
+//-l  指定库的名字(掐头去尾)
+//-I  指定头文件的路径
+//-o  指引生成文件的名字
+//ldd main 可以查看可执行程序运行需要哪些库
+```
+**加载方法**
+
+动态库在使用时，还需要加载，也就是添加到 `PATH` 中，否则就会出现库未找到的错误
+
+- 修改 `Path`
+
+  临时加载
+
+  -  `export LD_LIBRARY_PATH=动态库路径:$LD_LIBRARY_PATH`
+
+  - `$` 是取值符， `:` 是拼接，用这个来覆盖原来的值
+
+  永久加载
+
+  - 用户级别，将上面的语句写入 `~/.bashrc` ，然后重启终端或者 `source ~/.bashrc`
+
+  - 系统级别，将上面的语句写入 `/etc/profile` ，然后重启系统或者 `source /etc/profile`
+
+- 更新 `/etc/la.socache` 文件列表
+
+  - 找到配置文件 `/etc/ld.so.conf`
+  - 把动态库的绝对路径写入
+  - 执行 `sudo ldconfig`
+- 通过调用 `dlopen, dlclose, dlsym` 函数
+
+</details>
 
 # **系统编程**
 
