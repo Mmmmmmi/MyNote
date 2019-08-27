@@ -14,7 +14,8 @@
 
 ## **gcc 创建静态库与动态库**
 
-<details><summary><b>静态库</b></summary>
+<details><summary><b>静态库（Static Library）</b></summary>
+
 
 **命名规则**，由三部分组成：`libxxx.a` 其中 `xxx` 为库的名字
 
@@ -30,6 +31,7 @@ nm libtest.a
 ```
 
 **使用方法**
+
 ```c++
 g++ main.cc -I ./ -L./ -ltest -o main
 //-L  指定库的路径
@@ -42,11 +44,37 @@ g++ main.cc -I ./ -L./ -ltest -o main
 
 </details>
 
-<details><summary><b>动态库</b></summary>
+<details><summary><b>动态库（共享库 Shared Library ）</b></summary>
 
-**命名规则**，由三部分组成：`libxxx.so` 其中 `xxx` 为库的名字
+
+
+**命名规则**
+
+```c++
+libxxx.so.x.y.z
+//xxx 动态库名
+//x 主版本号，不同主版本号的库之间不兼容，需要重新编译
+//y 次版本号，高版本号向后兼容低版本号
+//z 发布版本号，不对接口进行更改，完全兼容
+```
+
+**路径**
+
+大部分包括 `Linux` 在内的开源系统遵循 `FHS（File Hierarchy Standard）`的标准，这标准规定了系统文件如何存放，包括各个目录结构、组织和作用。
+
+- `/lib` ：存放系统最关键和最基础的共享库，如动态链接器、C 语言运行库、数学库等
+- `/usr/lib` ：存放非系统运行时所需要的关键性的库，主要是开发库
+- `/usr/local/lib` ：存放跟操作系统本身并不十分相关的库，主要是一些第三方应用程序的库
+- 动态链接器会在 `/lib` 、`/usr/lib ` 和由 `/etc/ld.so.conf` 配置文件指定的，目录中查找共享库
+
+**环境变量**
+
+- `LD_LIBRARY_PATH`：临时改变某个应用程序的共享库查找路径，而不会影响其他应用程序
+- `LD_PRELOAD`：指定预先装载的一些共享库甚至是目标文件
+- `LD_DEBUG`：打开动态链接器的调试功能
 
 **创建步骤**
+
 ```c++
 //1. 源代码( c, cpp)，例如 test.cc
 //2. 生成对应的obj文件(.o)
@@ -91,7 +119,7 @@ g++ main.cc -I ./ -L./ -ltest -o main
 
   - 找到配置文件 `/etc/ld.so.conf`
   - 把动态库的绝对路径写入
-  - 执行 `sudo ldconfig`
+  - 执行 `sudo ldconfig [-v]` 
 - 通过调用 `dlopen, dlclose, dlsym` 函数
 
 </details>
