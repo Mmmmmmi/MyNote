@@ -4,7 +4,8 @@
 - [**关键字**](#关键字)
 - [**STL**](#stl)
 - [**C++11**](#c11)
-- [**设计模式**](#设计模式)
+- [**编译及调试**](#编译及调试)
+
 ## **类和对象**
 
 <b><details><summary>this 指针</summary></b>
@@ -291,138 +292,163 @@ new 会调用 operator new
 
 ## **C++11**
 
-### **列表初始化**
-
-### **范围 for**
-
-### **变量类型推导**
-
-### **类型转换**
-
-### **智能指针**
-
-<b><details><summary>auto_ptr</summary></b>
+<b><details><summary>列表初始化</summary></b>
 </details>
 
-<b><details><summary>unique_ptr</summary></b>
+<b><details><summary>范围 for</summary></b>
 </details>
 
-<b><details><summary>shared_ptr</summary></b>
+<b><details><summary>变量类型推导</summary></b>
 </details>
 
-### **final 和 override**
+<b><details><summary>类型转换</summary></b>
+</details>
 
-### **委派构造函数**
+<b><details><summary>智能指针</summary></b>
 
-### **右值引用**
+- <b><details><summary>auto_ptr</summary></b>
+  </details>
 
-### **lambda 表达式**
+- <b><details><summary>unique_ptr</summary></b>
+  </details>
 
-### **线程库**
-
-## **设计模式**
-
-<b><details><summary>单例模式</summary></b>
-
-#### **饿汉模式**
-
-```cpp
-// 饿汉模式
-// 程序启动时，就将对象创建好
-class Singleton1
-{
-public:
-    static Singleton1* getSingleton1()
-    {
-        return _singleton;
-    }
-    //Free类在进程结束时自动销毁，在它的析构函数中 delete 掉了 _singleton 
-    class Free
-    {
-    public:
-        ~Free()
-        {
-            if (_singleton != nullptr) {
-                std::cout << "delete _singleton" << std::endl;
-                delete _singleton;
-                _singleton = nullptr;
-            }
-        }
-    };
-    static Free free;
-private:
-    // 单例模式，所以只允许存在一份
-    // 将构造函数定义为私有
-    Singleton1()
-    {
-        std::cout << "Singleton1：" << this << std::endl;
-    }
-    // 不允许存在拷贝构造以及复制运算符重载
-    Singleton1(const Singleton1&);
-    Singleton1& operator=(const Singleton1&);
-    static Singleton1* _singleton;
-};
-Singleton1* Singleton1::_singleton = new Singleton1();
-Singleton1::Free Singleton1::free;
-```
-
-#### **懒汉模式**
-
-```cpp
-#include <mutex>
-
-// 懒汉模式
-class Singleton2
-{
-public:
-    // 创建
-    static volatile Singleton2* getSingleton2()
-    {
-        // 可能有编译器优化，指令重排的问题，也就是空间申请了，但是没有调用构造函数，
-        // 这样就可能全部阻塞到锁那里，因此再加一层判断。
-        if (_p == nullptr) {
-            // 这样可能造成线程全部堵塞在这
-            // 如果为空就创建
-            _m.lock();
-            if (_p == nullptr) {
-                _p = new Singleton2();
-            }
-            _m.unlock();
-        }
-        return _p;
-    }
-    // 释放，不能写在析构函数中，因为 delete 会调用析构函数 析构函数又会调用 delete  死循环
-    // 也不能直接写一个释放函数，因为，如果让线程来调用，那么应该让最后一个使用的线程的释放，
-    // 但是你不知道那个线程是最后一个，因此，应该写一个嵌套类来释放
-    class Free
-    {
-    public:
-        ~Free()
-        {
-            if (_p != nullptr) {
-                std::cout << "delete _p" << std::endl;
-                delete _p;
-                _p = nullptr;
-            }
-        }
-    };
-private:
-    // 只能在类中调用构造函数，这样，加上控制条件后，只能创建一份了
-    Singleton2()
-    {
-        std::cout << "Singleton2：" << this << std::endl;
-    }
-    Singleton2 (const Singleton2&);
-    Singleton2& operator=(const Singleton2&);
-    static volatile Singleton2* _p;
-    static std::mutex _m;
-    static Free _free;
-};
-volatile Singleton2* Singleton2::_p = nullptr;
-std::mutex Singleton2::_m;
-Singleton2::Free Singleton2::_free;
-```
+- <b><details><summary>shared_ptr</summary></b>
+  </details>
 
 </details>
 
-<b><details><summary>观察者模式</summary></b>
+<b><details><summary>final 和 override</summary></b>
+</details>
+
+<b><details><summary>委派构造函数</summary></b>
+</details>
+
+<b><details><summary>右值引用</summary></b>
+</details>
+
+<b><details><summary>lambda 表达式</summary></b>
+</details>
+
+<b><details><summary>线程库</summary></b>
+</details>
+
+## **编译及调试**
+
+<details><summary><b>静态库与动态库</b></summary>
+
+- <details><summary><b>静态库（Static Library）</b></summary>
+
+  **命名规则**，由三部分组成：`libxxx.a` 其中 `xxx` 为库的名字
+
+  **创建步骤**
+  ```c++
+  //1. 源代码( c, cpp)，例如 test.cc
+  //2. 生成对应的obj文件(.o)
+  g++ -c test.cpp -o test.o
+  //3. 打包
+  ar rcs libtest.a test.o
+  //ar  Linux 命令，建立或备存文件，或是从备存文件中抽取文件
+  //ar 可以集合许多文件，成为单一的备存文件。在备存文件中，所有成员文件皆保有原来的属性与权限
+  //r  将文件插入备存文件中。
+  //c  建立备存文件
+  //s  若备存文件中包含了对象模式，可利用此参数建立备存文件的符号表
+  //4. 查看静态库内容
+  nm libtest.a
+  ```
+  
+  **使用方法**
+  
+  ```c++
+  g++ main.cc -I ./ -L./ -ltest -o main
+  //-L  指定库的路径
+  //-l  指定库的名字(掐头去尾)
+  //-I  指定头文件的路径
+  //-o  指引生成文件的名字
+  ```
+  
+  `Linux` 的 `gcc` 默认链接动态库，当动态库不存在时才会去链接静态库，若是需要强制指定静态库，需要加指定选项`-static`
+  
+    </details>
+  
+- <details><summary><b>动态库（共享库 Shared Library ）</b></summary>
+  
+  
+  
+  **命名规则**
+  
+  ```c++
+  libxxx.so.x.y.z
+  //xxx 动态库名
+  //x 主版本号，不同主版本号的库之间不兼容，需要重新编译
+  //y 次版本号，高版本号向后兼容低版本号
+  //z 发布版本号，不对接口进行更改，完全兼容
+  ```
+  
+  **路径**
+  
+  大部分包括 `Linux` 在内的开源系统遵循 `FHS（File Hierarchy Standard）`的标准，这标准规定了系统文件如何存放，包括各个目录结构、组织和作用。
+  
+  - `/lib` ：存放系统最关键和最基础的共享库，如动态链接器、C 语言运行库、数学库等
+  - `/usr/lib` ：存放非系统运行时所需要的关键性的库，主要是开发库
+  - `/usr/local/lib` ：存放跟操作系统本身并不十分相关的库，主要是一些第三方应用程序的库
+  - 动态链接器会在 `/lib` 、`/usr/lib ` 和由 `/etc/ld.so.conf` 配置文件指定的，目录中查找共享库
+  
+  **环境变量**
+  
+  - `LD_LIBRARY_PATH`：临时改变某个应用程序的共享库查找路径，而不会影响其他应用程序
+  - `LD_PRELOAD`：指定预先装载的一些共享库甚至是目标文件
+  - `LD_DEBUG`：打开动态链接器的调试功能
+  
+  **创建步骤**
+  
+  ```c++
+  //1. 源代码( c, cpp)，例如 test.cc
+  //2. 生成对应的obj文件(.o)
+  g++ -c test.cpp -fPIC -o test.o
+  //3. 打包
+  g++ -shared test.o -o libtest.a
+  //4. 也可以2 3 一起执行
+  g++ -shared -fPIC test.c -o libtest.so
+  //-shared 该选项指定生成动态连接库（让连接器生成T类型的导出符号表，有时候也生成弱连接W类型的导出符号），不用该标志外部程序无法连接，相当于一个可执行文件
+  //-fPIC：表示编译为位置独立的代码，不用此选项的话编译后的代码是位置相关的所以动态载入时是通过代码拷贝的方式来满足不同进程的需要，而不能达到真正代码段共享的目的
+  //5. 也可用nm 查看，不过与静态库区别较大
+  nm libtest.so
+  ```
+  
+  **使用方法**
+  
+  ```c++
+  g++ main.cc -I ./ -L./ -ltest -o main
+  //-L  指定库的路径
+  //-l  指定库的名字(掐头去尾)
+  //-I  指定头文件的路径
+  //-o  指引生成文件的名字
+  //ldd main 可以查看可执行程序运行需要哪些库
+  ```
+  **加载方法**
+  
+  动态库在使用时，还需要加载，也就是添加到 `PATH` 中，否则就会出现库未找到的错误
+  
+  - 修改 `Path`
+  
+    临时加载
+  
+    -  `export LD_LIBRARY_PATH=动态库路径:$LD_LIBRARY_PATH`
+  
+    - `$` 是取值符， `:` 是拼接，用这个来覆盖原来的值
+  
+    永久加载
+  
+    - 用户级别，将上面的语句写入 `~/.bashrc` ，然后重启终端或者 `source ~/.bashrc`
+  
+    - 系统级别，将上面的语句写入 `/etc/profile` ，然后重启系统或者 `source /etc/profile`
+  
+  - 更新 `/etc/la.socache` 文件列表
+  
+    - 找到配置文件 `/etc/ld.so.conf`
+    - 把动态库的绝对路径写入
+    - 执行 `sudo ldconfig [-v]`
+  - 通过调用 `dlopen, dlclose, dlsym` 函数
+  
+  </details>
+</details>
