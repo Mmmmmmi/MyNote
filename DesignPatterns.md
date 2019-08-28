@@ -44,8 +44,9 @@ private:
 Singleton1* Singleton1::_singleton = new Singleton1();
 Singleton1::Free Singleton1::free;
 ```
+</details>
 
-#### **懒汉模式**
+<b><details><summary>懒汉模式</summary></b>
 
 ```cpp
 #include <mutex>
@@ -101,8 +102,6 @@ volatile Singleton2* Singleton2::_p = nullptr;
 std::mutex Singleton2::_m;
 Singleton2::Free Singleton2::_free;
 ```
-
 </details>
 
-<b><details><summary>观察者模式</summary></b>
-</details>
+# 观察者模式
