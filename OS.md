@@ -10,7 +10,7 @@
 
 # **信号**
 
-<b><details><summary><font size = "5">信号的概念</font></summary></b>
+<b><details><summary>1. 信号的概念</summary></b>
 
 #### **1.1 基本概念**
 
@@ -56,7 +56,7 @@
 </details>
 
 
-<b><details><summary><font size = "5">信号的产生方式</font></summary></b>
+<b><details><summary>2. 信号的产生方式</summary></b>
 
 - **对于前台进程，用户可以通过输入特殊终端字符来为它发送信号。** 比如输入`Ctrl + C`通常会给进程发送一个中断信号(SIGINT)，`Ctrl + Z`会发送`SIGTSTP`信号
 - **系统异常，** 比如非法内存访问
@@ -65,7 +65,7 @@
 
 </details>
 
-<b><details><summary><font size = "5">发送信号</font></summary></b>
+<b><details><summary>3. 发送信号</summary></b>
 
 #### **3.1 通过按键发送信号**
 
@@ -271,7 +271,7 @@
 
 </details>
 
-<b><details><summary><font size = "5">信号在内核中的表示</font></summary></b>
+<b><details><summary>4. 信号在内核中的表示</summary></b>
 
 
 #### **4.1 相关概念**
@@ -451,7 +451,7 @@ typedef struct {
 </details>
 </details>
 
-<b><details><summary><font size = "5">信号集</font></summary></b>
+<b><details><summary>5. 信号集</summary></b>
 
 <b><details><summary>信号集函数</summary></b>
 
@@ -525,7 +525,7 @@ int sigpending(sigset_t * set)
 </details>
 </details>
 
-<b><details><summary><font size = "5">信号的处理流程</font></summary></b>
+<b><details><summary>6. 信号的处理流程</summary></b>
 
 对于一个完整的信号生命周期(从信号发送到相应的处理函数执行完毕)来说，可以分为三个阶段：**信号产生** ， **信号在进程中注册** ，**信号的执行和注销**
 
@@ -585,7 +585,7 @@ struct sigqueue{
 </details>
 </details>
 
-<b><details><summary><font size = "5">信号的处理方式</font></summary></b>
+<b><details><summary>7. 信号的处理方式</summary></b>
 
 <b><details><summary>默认的处理方式</summary></b>
 
@@ -616,7 +616,7 @@ struct sigqueue{
 </details>
 </details>
 
-<b><details><summary><font size = "5">信号的捕捉</font></summary></b>
+<b><details><summary>8. 信号的捕捉</summary></b>
 
 
 <b><details><summary>信号捕获过程</summary></b>
@@ -664,7 +664,7 @@ sighandler_t signal(int signum, sighandler_t handler);
 
 `signal` 函数成功调用时返回一个函数指针，该函数指针类型也是  `sighandler_t`  。这个返回值是前一次调用 `signal` 函数时传入的函数指针，或者是信号 `  sig` 对应的默认处理函数指针 ` SIG_DEF` （如果是第一次调用 `signal`的话 ）
 
-`signal` 系统调用出错时返回 `SIG_ERR`，并设置 `errno` 
+`signal` 系统调用出错时返回 `SIG_ERR`，并设置 `errno`
 
 </details>
 
@@ -751,65 +751,65 @@ struct sigaction {
 
 # **多进程**
 
-<b><details><summary><font size = "5">进程状态</font></summary></b>
-</details>			 
-					 
-<b><details><summary><font size = "5">`fork` 系统调用</font></summary></b>
-</details>			 
-					 
-<b><details><summary><font size = "5">`exec` 系列系统调用</font></summary></b>
-</details>			 
-					 
-<b><details><summary><font size = "5">处理僵尸进程</font></summary></b>
-</details>			 
-					 
-<b><details><summary><font size = "5">管道</font></summary></b>
-</details>			 
-					 
-<b><details><summary><font size = "5">信号量</font></summary></b>
-</details>			 
-					 
-<b><details><summary><font size = "5">共享内存</font></summary></b>
-</details>			 
-					 
-<b><details><summary><font size = "5">消息队列</font></summary></b>
-</details>			 
-					 
-<b><details><summary><font size = "5">IPC命令</font></summary></b>
-</details>			 
-					 
-<b><details><summary><font size = "5">在进程间传递文件描述符</font></summary></b>
+<b><details><summary>1. 进程状态</summary></b>
+</details>
+
+<b><details><summary>2. `fork` 系统调用</summary></b>
+</details>
+
+<b><details><summary>3. `exec` 系列系统调用</summary></b>
+</details>
+
+<b><details><summary>4. 处理僵尸进程</summary></b>
+</details>
+
+<b><details><summary>5. 管道</summary></b>
+</details>
+
+<b><details><summary>6. 信号量</summary></b>
+</details>
+
+<b><details><summary>7. 共享内存</summary></b>
+</details>
+
+<b><details><summary>8. 消息队列</summary></b>
+</details>
+
+<b><details><summary>9. IPC命令</summary></b>
+</details>
+
+<b><details><summary>10. 在进程间传递文件描述符</summary></b>
 </details>
 
 
 # **多线程**
 
-<b><details><summary>多线程概述</summary></b>
+<b><details><summary>1. 多线程概述</summary></b>
 </details>
 
-<b><details><summary><font size = "5">创建线程和结束线程</font></summary></b>
+<b><details><summary>2. 创建线程和结束线程</summary></b>
 </details>
 
-<b><details><summary><font size = "5">线程属性</font></summary></b>
+<b><details><summary>3. 线程属性</summary></b>
 </details>
 
-<b><details><summary><font size = "5">POSIX信号量</font></summary></b>
+<b><details><summary>4. POSIX信号量</summary></b>
 </details>
 
-<b><details><summary><font size = "5">互斥锁</font></summary></b>
+<b><details><summary>5. 互斥锁</summary></b>
 </details>
 
-<b><details><summary><font size = "5">条件变量</font></summary></b>
+<b><details><summary>6. 条件变量</summary></b>
 </details>
 
-<b><details><summary><font size = "5">多线程环境</font></summary></b>
+<b><details><summary>7. 多线程环境</summary></b>
 </details>
 
 
 # **I/O模型**
 任何 IO 过程中，都包含两个步骤：第⼀步是等待，第⼆步是拷贝。而在实际的应用场景中，等待消耗的时间往往都远⾼于拷贝的时间。因此，要让 IO 更高效，最核⼼的办法就是让等待的时间尽量少
 
-<b><details><summary><font size = "5">相关知识点</font></summary></b>
+<b><details><summary>1. 相关知识点</summary></b>
 
 - **同步与异步**：
   - 同步：在发出系统调用后，一直等到有结果了才会返回。无论调用是否成功，一定会返回结果。可以理解为，调用者主动等待调用结果，有结果了才会返回
@@ -820,7 +820,7 @@ struct sigaction {
 
 </details>
 
-<b><details><summary><font size = "5">五种 I/O 模型</font></summary></b>
+<b><details><summary>2. 五种 I/O 模型</summary></b>
 
 - **阻塞 IO**：在内核将数据准备好之前，系统调⽤用会一直等待。所有套接字默认都是阻塞 IO
 
@@ -836,7 +836,7 @@ struct sigaction {
 </details>
 </details>
 
-<b><details><summary><font size = "5">非阻塞IO</font></summary></b>
+<b><details><summary>3. 非阻塞IO</summary></b>
 #### **fcntl**
 
 ```cpp
@@ -853,17 +853,17 @@ int fcntl(int fd, int cmd, ... /* arg */ );
 </details>
 </details>
 
-<b><details><summary><font size = "5">select</font></summary></b>
+<b><details><summary>4. select</summary></b>
 
 </details>
 
-<b><details><summary><font size = "5">poll</font></summary></b>
+<b><details><summary>5. poll</summary></b>
 </details>
 
-<b><details><summary><font size = "5">epoll</font></summary></b>
+<b><details><summary>6. epoll</summary></b>
 </details>
 
-<b><details><summary><font size = "5">比较</font></summary></b>
+<b><details><summary>7. 比较</summary></b>
 
 <table>
 <tr>
