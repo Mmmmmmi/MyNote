@@ -8,10 +8,9 @@
 
 [**I/O模型**](#I/O模型)
 
-
 # **信号**
 
-### **1. 信号的概念**
+<b><details><summary>信号的概念</summary></b>
 
 #### **1.1 基本概念**
 
@@ -56,14 +55,17 @@
 
 </details>
 
-### **2. 信号的产生方式**
+
+<b><details><summary>信号的产生方式</summary></b>
 
 - **对于前台进程，用户可以通过输入特殊终端字符来为它发送信号。** 比如输入`Ctrl + C`通常会给进程发送一个中断信号(SIGINT)，`Ctrl + Z`会发送`SIGTSTP`信号
 - **系统异常，** 比如非法内存访问
 - **系统状态变化，** 比如`alarm`定时器到期将引起`SIGALRM`信号
 - **运行kill命令或调用kill函数**
 
-### **3. 发送信号**
+</details>
+
+<b><details><summary>发送信号</summary></b>
 
 #### **3.1 通过按键发送信号**
 
@@ -82,31 +84,31 @@
   ```
 
     - `pid` 指定目标进程
-    
+
         `pid > 0 `   信号发给PID为`pid`的进程
-    
+
         `pid = 0`   信号发给本进程组内的其他进程
-    
+
         `pid = -1`  信号发给除init进程外的所有进程，但发送者需要有对目标进程发送信号的权限
-    
+
         `pid < -1`  信号发给组ID为`-pid`的进程组中的所有成员
-    
+
     - `sig` 指定信号
-    
+
         Linux定义的信号值都大于`0`， 如果 `sig = 0` ，则 kill 函数不发任何信号
-    
+
     - 返回值
-    
+
         `0`   函数成功
-    
+
         `-1`  函数失败，并设置`errno`
-    
+
         `errno`含义：
-    
+
         `EINVAL`   无效的信号
-    
+
         `EPERM`    该进程没有权限发送信号给任何一个目标进程
-    
+
         `ESRCH`    目标进程或进程组不存在
 
 </details>
@@ -266,7 +268,10 @@
   ```
 </details>
 
-### **4 信号在内核中的表示**
+
+</details>
+
+<b><details><summary>信号在内核中的表示</summary></b>
 
 #### **4.1 相关概念**
 
@@ -443,8 +448,9 @@ typedef struct {
 描述符的 `count` 字段表示共享该结构的进程个数。**在一个POSIX的多线程应用中，线程组中的所有轻量级进程都引用相同的信号描述符和信号处理程序的描述符**
 
 </details>
+</details>
 
-### **5. 信号集**
+<b><details><summary>信号集</summary></b>
 
 <b><details><summary>信号集函数</summary></b>
 
@@ -516,8 +522,9 @@ int sigpending(sigset_t * set)
 `sigpending` 成功时，返回 `0`  ，失败时返回 `-1` 并设置 `errno` 
 
 </details>
+</details>
 
-### **6. 信号的处理流程**
+<b><details><summary>信号的处理流程</summary></b>
 
 对于一个完整的信号生命周期(从信号发送到相应的处理函数执行完毕)来说，可以分为三个阶段：**信号产生** ， **信号在进程中注册** ，**信号的执行和注销**
 
@@ -575,8 +582,9 @@ struct sigqueue{
 内核处理一个进程收到的信号的时机是在一个进程从内核态返回用户态时。所以，当一个进程在内核态下运行时，软中断信号并不立即起作用，要等到将返回用户态时才处理。进程只有处理完信号才会返回用户态，进程在用户态下不会有未处理完的信号。
 
 </details>
+</details>
 
-### **7. 信号的处理方式**
+<b><details><summary>信号的处理方式</summary></b>
 
 <b><details><summary>默认的处理方式</summary></b>
 
@@ -605,8 +613,9 @@ struct sigqueue{
 信号处理函数应该是可重入的，否则很容易引发一些竞态条件
 
 </details>
+</details>
 
-### **8. 信号的捕捉**
+<b><details><summary>信号的捕捉</summary></b>
 
 <b><details><summary>信号捕获过程</summary></b>
 
@@ -735,41 +744,71 @@ struct sigaction {
 每个信号都有两个标志位分别表示阻塞 (`block`) 和未决 (`pending`) ，还有一个函数指针表示处理动作。信号产生时，内核在进程控制块中设置该信号的未决标志，直到信号递达才清除该标志。在上图中, `SIGHUP`信号未阻塞也未产生过，当它递达时执⾏行默认处理动作。 `SIGINT`信号产⽣生过，但正在被阻塞，所以暂时不能递达。虽然它的处理动作是忽略，但在没有解除阻塞之前不能忽略这个信号，因为进程仍有机会改变处理动作之后再解除阻塞。 `SIGQUIT`信号未产生过,一旦产生`SIGQUIT`信号将被阻塞，它的处理动作是用户自定义函数`sighandler`
 
 </details>
+</details>
 
 
 # **多进程**
 
-### **进程状态**
-### **`fork` 系统调用**
-### **`exec` 系列系统调用**
-### **处理僵尸进程**
-### **管道**
-### **信号量**
-### **共享内存**
-### **消息队列**
-### **IPC命令**
-### **在进程间传递文件描述符**
+<b><details><summary>进程状态</summary></b>
+</details>
+
+<b><details><summary>`fork` 系统调用</summary></b>
+</details>
+
+<b><details><summary>`exec` 系列系统调用</summary></b>
+</details>
+
+<b><details><summary>处理僵尸进程</summary></b>
+</details>
+
+<b><details><summary>管道</summary></b>
+</details>
+
+<b><details><summary>信号量</summary></b>
+</details>
+
+<b><details><summary>共享内存</summary></b>
+</details>
+
+<b><details><summary>消息队列</summary></b>
+</details>
+
+<b><details><summary>IPC命令</summary></b>
+</details>
+
+<b><details><summary>在进程间传递文件描述符</summary></b>
+</details>
+
 
 # **多线程**
 
-### **多线程概述**
+<b><details><summary>多线程概述</summary></b>
+</details>
 
-### **创建线程和结束线程**
+<b><details><summary>创建线程和结束线程</summary></b>
+</details>
 
-### **线程属性**
+<b><details><summary>线程属性</summary></b>
+</details>
 
-### **POSIX信号量**
+<b><details><summary>POSIX信号量</summary></b>
+</details>
 
-### **互斥锁**
+<b><details><summary>互斥锁</summary></b>
+</details>
 
-### **条件变量**
+<b><details><summary>条件变量</summary></b>
+</details>
 
-### **多线程环境**
+<b><details><summary>多线程环境</summary></b>
+</details>
+
 
 # **I/O模型**
 任何 IO 过程中，都包含两个步骤：第⼀步是等待，第⼆步是拷贝。而在实际的应用场景中，等待消耗的时间往往都远⾼于拷贝的时间。因此，要让 IO 更高效，最核⼼的办法就是让等待的时间尽量少
 
-## **1. 相关知识点**
+<b><details><summary>相关知识点</summary></b>
+
 - **同步与异步**：
   - 同步：在发出系统调用后，一直等到有结果了才会返回。无论调用是否成功，一定会返回结果。可以理解为，调用者主动等待调用结果，有结果了才会返回
   - 异步：在发出系统调用后，调用就直接返回了，等到有结果之后，再由被调用者通过状态、通知来通知调用者，或通过回调函数处理这个调用
@@ -777,7 +816,9 @@ struct sigaction {
   - 阻塞：在调用结果返回之前，当前线程会被挂起，等到得到调用结果之后，才会返回
   - 非阻塞：无论是否能得到结果，线程都会返回
 
-## **2. 五种 I/O 模型**
+</details>
+
+<b><details><summary>五种 I/O 模型</summary></b>
 
 - **阻塞 IO**：在内核将数据准备好之前，系统调⽤用会一直等待。所有套接字默认都是阻塞 IO
 
@@ -790,6 +831,7 @@ struct sigaction {
 - **异步 IO**：由内核在数据拷贝完成时，通知应用程序。与信号驱动 IO 不同的地方是，信号驱动 IO 是在数据准备好的时候，通知应用程序进行 IO 操作
 
 
+</details>
 </details>
 
 <b><details><summary>非阻塞IO</summary></b>
@@ -806,6 +848,7 @@ int fcntl(int fd, int cmd, ... /* arg */ );
 
 
 
+</details>
 </details>
 
 <b><details><summary>select</summary></b>
