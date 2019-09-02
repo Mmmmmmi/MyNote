@@ -20,9 +20,9 @@
 ### for 循环
 
 ```lua
-for var=exp1,exp2,exp3 do  
-    <执行体>  
-end 
+for var=exp1,exp2,exp3 do
+    <执行体>
+end
 --[
 var 从 exp1 变化到 exp2，变化的步长是 exp3，同时执行一次 "执行体"
 如果 exp3 省略，那么步长就为 1

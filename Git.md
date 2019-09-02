@@ -3,7 +3,7 @@
 # **基础操作**
 
 ```c++
-//查看历史commit 
+//查看历史commit
 git log
 
 //查看最近commit

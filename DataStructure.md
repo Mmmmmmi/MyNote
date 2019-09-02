@@ -91,8 +91,8 @@
 
     <table>
     <tr>
-        <th width = 10%>插入方式</th>
-        <th width = 70%>描述</th>
+        <th width = 20%>插入方式</th>
+        <th width = 60%>描述</th>
         <th width = 20%>旋转方式</th>
     </tr>
     <tr>
