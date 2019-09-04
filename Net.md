@@ -4,22 +4,8 @@
 
 # **TCP/IP 五层模型**
 
-
-<h1><details open><summary>测试</summary>
-1
-2
-3
-4
-</details></h1>
-
-
-
-
-
-
-
-
 <b><details open><summary>应用层</summary></b>
+
 </details>
 
 <b><details open><summary>传输层</summary></b>
@@ -98,7 +84,12 @@
 
     **16位窗口大小（Window Size）**，是 `TCP` 流量控制的一个手段，这里说的窗口指的是**接收通告窗口（Receiver Window，RWND）**。它告诉对方本端的 `TCP` 接收缓冲区还能容纳多少字节的数据，这样对方就可以控制发送数据的速度
 
-    **16位校验和（TCP Checksum）**，由发送端填充
+    **16位校验和（TCP Checksum）**，由发送端填充，接收对端 `TCP` 报文段执行 `CRC` 算法以校验 `TCP` 报文段在传输过程中是否损坏。注意，这个校验不仅包括 `TCP` 头部，也包括数据部分。这也是 `TCP` 可靠传输的一个重要保障
+
+    **16位紧急指针（Urgent Pointer）**，是一个正的偏移量，它和序号字段的值相加表示最后一个紧急数据的下一字节的序号。因此，确切地说，这个字段是紧急指针相对当前序号的偏移，不妨称之为紧急偏移。 `TCP` 的紧急指针是发送端向接收端发送紧急数据的方法
+
+- 
+
 
 </details>
 
