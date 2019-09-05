@@ -54,11 +54,11 @@
     - 数据校验
 - **TCP 的报文结构**
 
-    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcpstruct.png
+    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcpstruct.png)
 
 - **TCP 首部**
 
-    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcphead.png
+    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcphead.png)
 
     **16位端口号（Port Number）**，告知主机该报文段来自哪里(源端口)以及传给哪个上层协议或应用程序的(目的端口)
 
@@ -125,16 +125,16 @@
 
     **TCP的拥塞控制图**
 
-    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcpcwnd变化.png
+    ![tcpcwnd](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcpcwnd变化.png)
 
-    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcp拥塞控制流程.png
+    ![tcp拥塞控制](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcp拥塞控制流程.png)
 
 
 - **TCP的状态转移图**
 
-    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcp客户端服务端状态转移.png
+    ![tcpstate](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcp客户端服务端状态转移.png)
 
-    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcp状态转移图.png
+    ![tcpstate](https://github.com/Mmmmmmi/MyNote/blob/master/resource/tcp状态转移图.png)
 
 - **TCP三次握手建立连接**
 
@@ -190,7 +190,7 @@
     - **首部开销小**，首部只有 8 个字节，分为四部分
 - **UDP报文结构**
 
-    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/udp报文.png
+    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/udp报文.png)
 
     **16位源端口号**，在需要对方回信时选用，不需要时可为 `0`
     **16位目的端口号**，在终点交付报文时必须用到
@@ -199,7 +199,7 @@
 
 - **UDP首部**
 
-    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/udp首部.png
+    ![sig](https://github.com/Mmmmmmi/MyNote/blob/master/resource/udp首部.png)
 
 - **UDP常用场景**
     - 域名系统（DNS）
