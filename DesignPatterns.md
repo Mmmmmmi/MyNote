@@ -66,7 +66,7 @@ public:
             // 如果为空就创建
             _m.lock();
             if (_p == nullptr) {
-                SIngleton2 *tmp = new Singleton2();
+                Singleton2 *tmp = new Singleton2();
                 _p = tmp;
             }
             _m.unlock();
