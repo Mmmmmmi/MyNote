@@ -800,7 +800,7 @@ struct sigaction {
         </tr>
         <tr>
             <td>p = 0</td>
-            <td rowspan = "2">拷贝 n 个字节，并返回 n ，当管道缓冲区为 n 时，等待数据</td>
+            <td rowspan = "2">拷贝 n 个字节，并返回 n ，当管道缓冲区为空时，等待数据</td>
             <td>等待某一数据，拷贝它，并返回它的大小</td>
             <td>返回 -EAGAIN</td>
             <td>返回 0 </td>
