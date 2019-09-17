@@ -786,7 +786,7 @@ struct sigaction {
 
     <table>
         <tr>
-            <th width = 10% rowspan = "3">管道大小</th>
+            <th width = 15% rowspan = "3">管道大小</th>
             <th colspan = "3" >至少有一个写进程</th>
             <th rowspan = "3">没有写进程</th>
         </tr>
