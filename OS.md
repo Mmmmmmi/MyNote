@@ -84,31 +84,31 @@
   ```
 
     - `pid` 指定目标进程
-
+    
         `pid > 0 `   信号发给PID为`pid`的进程
-
+    
         `pid = 0`   信号发给本进程组内的其他进程
-
+    
         `pid = -1`  信号发给除init进程外的所有进程，但发送者需要有对目标进程发送信号的权限
-
+    
         `pid < -1`  信号发给组ID为`-pid`的进程组中的所有成员
-
+    
     - `sig` 指定信号
-
+    
         Linux定义的信号值都大于`0`， 如果 `sig = 0` ，则 kill 函数不发任何信号
-
+    
     - 返回值
-
+    
         `0`   函数成功
-
+    
         `-1`  函数失败，并设置`errno`
-
+    
         `errno`含义：
-
+    
         `EINVAL`   无效的信号
-
+    
         `EPERM`    该进程没有权限发送信号给任何一个目标进程
-
+    
         `ESRCH`    目标进程或进程组不存在
 
 </details>
@@ -763,7 +763,79 @@ struct sigaction {
 <b><details><summary>4. 处理僵尸进程</summary></b>
 </details>
 
-<b><details><summary>5. 管道</summary></b>
+<b><details open><summary>5. 管道</summary></b>
+
+
+<b><details open><summary>匿名管道</summary></b>
+
+- 相关概念
+
+- 管道的数据结构
+
+- 使用管道
+    
+    管道被看作是打开的文件，但是在已安装的文件系统中没有相应的映象。可以使用 `pipe()` 系统调用来创建一个新管道，这个系统调用返回一对文件描述符（参数），进程可以通过 `fork()` 函数将两个文件描述符传递给它的子进程，由此与子进程共享管道。进程可以在 `read()` 系统调用中使用第一个文件描述符从管道中读取数据，同样也可以在 `write()` 系统调用中使用第二个文件描述符向管道中写入数据
+
+    `POSIX` 只定义了半双工的管道，因此即使 `pipe()` 返回了两个文件描述符，在进程使用一个文件描述符之前，仍需要将另外一个文件描述符关闭，如果需要的是双向数据流，那么进程必须通过两次 `pipe()` 来使用两个不同的管道
+
+- 从管道中读取数据
+    
+    希望从管道中读取数据的进程发出一个 `read()` 系统调用，为管道的读端指定一个文件描述符，内核最终调用与这个文件描述符相关的文件操作表中所找到的 `read()` 方法，在管道的情况下，`read` 方法在 `read_pipe_fops` 表中的表项指向 `pipe_read()` 函数
+
+    该系统调用从一个管道大小为 `p` （管道缓冲区中待读的字节数）的管道中读取 `n` 个字节
+
+    <table>
+        <tr>
+            <th width = 10% rowspan = "3">管道大小</th>
+            <th colspan = "3" >至少有一个写进程</th>
+            <th rowspan = "3">没有写进程</th>
+        </tr>
+        <tr>
+            <td colspan = "2">阻塞读</td>
+            <td rowspan = "2">非阻塞读</td>
+        </tr>
+        <tr>
+            <td>睡眠的写者进程</td>
+            <td>无睡眠的写者进程</td>
+        </tr>
+        <tr>
+            <td>p = 0</td>
+            <td rowspan = "2">拷贝 n 个字节，并返回 n ，当管道缓冲区为 n 时，等待数据</td>
+            <td>等待某一数据，拷贝它，并返回它的大小</td>
+            <td>返回 -EAGAIN</td>
+            <td>返回 0 </td>
+        </tr>
+        <tr>
+            <td>0 < p < n</td>
+            <td colspan = "3">拷贝 p 个字节并返回 p ，在管道的缓冲区中还剩 0 个字节</td>
+        </tr>
+        <tr>
+            <td>p >= n</td>
+            <td colspan = "4">拷贝 n 个字节并返回 n ，在管道的缓冲区中还剩 p - n 个字节</td>
+        </tr>
+
+    </table>
+
+- 向管道中写入数据
+
+- 函数调用
+    ```
+    #include <unistd.h>
+    int pipe(int filedes[2]);
+
+    参数是经由 pipe 函数返回的两个文件描述符 
+        filedes[0]  读描述符
+        filedes[1]  写描述符
+    返回值 
+        -1  失败
+    ```
+
+</details>
+
+<b><details open><summary>命名管道</summary></b>
+
+</details>
+
 </details>
 
 <b><details><summary>6. 信号量</summary></b>
