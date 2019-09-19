@@ -849,7 +849,7 @@ struct sigaction {
         <tr>
             <td>n > 4096 </td>
             <td>拷贝 n 个字节（必要时要等待）并返回 n</td>
-            <td>如果 u > 0，就拷贝 u 个字节并返回 n，否则就返回 -EAGAIN </td>
+            <td>如果 u > 0，就拷贝 u 个字节并返回 u，否则就返回 -EAGAIN </td>
         </tr>
         <tr>
             <td>u >= n</td>
