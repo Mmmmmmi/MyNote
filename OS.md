@@ -844,7 +844,7 @@ struct sigaction {
             <td>u < n <= 4096 </td>
             <td>等待，直到有 n - u 个字节被释放为止，拷贝 n 个字节，并返回 n </td>
             <td>返回 -EAGAIN</td>
-            <td>发送 SIGPIPE 信号并返回 -EPIPE</td>
+            <td rowspan = "2">发送 SIGPIPE 信号并返回 -EPIPE</td>
         </tr>
         <tr>
             <td>n > 4096 </td>
