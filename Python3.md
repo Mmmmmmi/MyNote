@@ -179,7 +179,7 @@ else :
 
 <b><details><summary>循环语句</summary></b>
 
-- **while 循环**
+- **`while` 循环**
 ```python
 # while <判断条件> :
 #    <表达式>
@@ -195,7 +195,7 @@ while counter < 3 :
 2
 ```
 
-- **while 循环使用 else 语句**, 在 while … else 在条件语句为 false 时执行 else 的语句块
+- **`while` 循环使用 else 语句**, 在 `while … else` 在条件语句为 `false` 时执行 `else` 的语句块，可以使用 `break` 来提前终止循环
 ```python
 
 counter = 0
@@ -211,7 +211,7 @@ counter > 3
 
 ```
 
-- **for 循环**
+- **`for` 循环**
 
 ```python
 # for i in range (<计数值>) :
@@ -245,7 +245,7 @@ for key in a :
 ip 127.0.0.1
 port 80
 ```
-- **range 函数**, 内建函数 range 能够生成一个数字组成的列表，方便进⾏for 循环遍历，range 函数有三个参数。前两个参数分别表示了⼀个前闭后开的区间。第三个参数表示 step, 即每次迭代的步长
+- **`range` 函数**, 内建函数 `range` 能够生成一个数字组成的列表，方便进⾏ `for` 循环遍历，`range` 函数有三个参数。前两个参数分别表示了⼀个前闭后开的区间。第三个参数表示 `step`, 即每次迭代的步长
 ```python
 
 # 遍历区间 [0, 5)
@@ -290,3 +290,56 @@ for i in range(-10, -15, -1) :
 ```
 
 </details>
+
+<b><details><summary>函数模块</summary></b>
+
+- **定义函数**
+```python
+# Python 中用 def 关键字来定义函数
+def function() :
+    print("function")
+```
+- **用模块管理函数**，`python` 中每个文件代表了一个模块(module)，在不同的模块中可以有同名的函数，在使用函数的时候通过 `import` 关键字导入指定的模块就可以区分到底要使用的是哪个模块中的 `foo` 函数
+```python
+# module1.py
+def foo():
+    print("module1.py")
+# module2.py
+def foo():
+    print("module2.py")
+
+# 不用导入时机的不同效果
+# main.py
+from module1 import foo
+foo()   # module1.py
+from module2 import foo
+foo()   # module2.py
+
+# main.py
+from module1 import foo
+from module2 import foo
+foo()   #module2.py  调用的是最后导入的
+
+# main.py
+import module1 as m1 
+import module2 as m2
+m1.foo()    #module1.py
+m2.foo()    #module2.py
+```
+- 如果导入的模块除了定义函数之外还中有可以执行代码，那么 `python` 解释器在导入这个模块时就会执行这些代码，事实上我们可能并不希望如此，因此如果在模块中编写了执行代码，最好是将这些执行代码放入如下所示的条件中，这样的话除非直接运行该模块， `if` 条件下的这些代码是不会执行的，因为只有直接执行的模块的名字才是 `__main__`
+```python
+# module.py
+def foo():
+    print("module")
+# __name__ 是 python 中一个隐含的变量它代表了模块的名字
+# 只有被 python 解释器直接执行的模块的名字才是 __main__
+if __name__ == "__main__":
+    print("__main__")
+
+# test.py
+import module
+foo()   # 只会输出 “module”, 不会输出上面的 “__main__”
+```
+</deatils>
+
+
