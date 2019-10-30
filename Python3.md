@@ -84,6 +84,19 @@ keyword.kwlist
 
 </details>
 
+<b><details><summary>字符串和常用数据结构</summary></b>
+
+- **字符串**
+- **列表**
+- **生成式和生成器**
+- **元组**
+- **集合**
+- **字典**
+
+
+
+</details>
+
 <b><details><summary>输入函数</summary></b>
 
 - **input() 函数从控制台获得用户输入，获取的用户输入以字符串形式保存在<变量>中**
