@@ -84,7 +84,7 @@ keyword.kwlist
 
 </details>
 
-<b><details open><summary>字符串和常用数据结构</summary></b>
+<b><details><summary>字符串和常用数据结构</summary></b>
 
 - **字符串**
 ```python
