@@ -84,17 +84,228 @@ keyword.kwlist
 
 </details>
 
-<b><details><summary>字符串和常用数据结构</summary></b>
+<b><details open><summary>字符串和常用数据结构</summary></b>
 
 - **字符串**
+```python
+# 单个或多个字符用单引号或者双引号包围起来
+s1 = 'hello, world!'
+s2 = "hello, world!"
+
+# 以三个双引号或者单引号开头的字符可以折行
+s3 = """
+hello,
+world!
+"""
+s4 = '''
+hello,
+world!
+'''
+# 可以在字符串中使用 \ 来表示转义
+# 要表示 \ 需要写成 \\  要表示 ‘ 需要写成 \'
+s1 = "\'\\"
+
+# \ 后面跟一个八进制或者十六进制数来表示字符，也可以跟 Unicode 字符编码来表示字符
+s1 = "\141\x63\u0065"
+
+# 如果不希望字符串中的 \ 表示转义，可以通过在字符串最前面加上字母 r 来说明
+s1 = r"\'hello, world!"
+
+# 可以使用 + 进行拼接，使用 * 运算符重复字符串的内容，使用 in 和 not in 来判断一个字符串是否包含另外一个字符串（成员运算），也可以用[]和[:]运算符从字符串取出某个字符或某些字符（切片运算）
+
+# 格式化输出字符串
+a, b = 2, 10
+print("%d + %d = %d" % (a, b, a * b))
+
+# 也可以用字符串提供的方法实现输出
+print('{0} * {1} = {2}'.format(a, b, a * b))
+
+# python3.6 以后可以直接在字符串前面加上 f 
+print(f"{a} * {b} = {a * b}")
+```
 - **列表**
+```python
+# 定义
+list1 = [1, 2, 3, 4, 5]
+
+# * 代表元素的重复
+list2 = ["M"] * 3 # ["M", "M", "M"]
+
+# 计算列表长度（元素个数）
+len(list1)
+
+# 通过enumerate函数处理列表之后再遍历可以同时获得元素索引和值
+for index, elem in enumerate(list1):
+    print(index, elem)
+
+# 操作 list 中的元素
+list1 = [1, 2, 3, 4, 5]
+
+# 添加
+list1.append(200)
+list1.insert(1, 1200)
+
+# 排序，直接在列表对象上排序
+list1.sort(reverse=True)
+
+# 排序，sorted 函数返回列表排序后的拷贝不会影响传入的列表
+list2 = sorted(list1, reverse=True)
+
+# 通过 key 关键字参数指定根据字符串长度进行排序而不是默认的字母表排序
+list3 = sorted(list1, key=len)
+```
 - **生成式和生成器**
+```python
+# 可以使用列表的生成式语法来创建列表
+f = [x for x in range(1, 10)]
+# [1, 2, 3, 4, 5, 6, 7, 8, 9] 
+
+f = [x + y for x in "ABC" for y in "123"]
+# ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3']
+
+# 用列表的生成表达式语法创建列表容器
+# 用这种语法创建列表之后元素已经准备就绪所以需要耗费较多的内存空间
+f = [x ** 2 for x in range(1, 10)]
+print(sys.getsizeof(f))
+print(f)
+
+# 通过下面的代码创建一个生成器对象
+# 通过生成器可以获取到数据但它不占用额外的空间存储数据
+# 每次需要数据的时候就通过内部的运算得到数据(需要花费额外的时间)
+f = (x ** 2 for x in range(1, 10))
+print(sys.getsizeof(f))  # 相比生成式生成器不占用存储数据的空间
+print(f)
+for val in f:
+    print(val)
+
+# 使用 yield 将普通函数改造成生成器函数
+# fib 是一个生成斐波那契数列的生成器
+def fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+        yield a
+
+def main():
+    for val in fib(20):
+        print(val)
+
+if __name__ == '__main__':
+    main()
+```
+
 - **元组**
+```python
+# python中的元组与列表类似也是一种容器数据类型，可以用一个变量（对象）来存储多个数据，不同之处在于元组的元素不能修改。顾名思义，我们把多个元素组合到一起就形成了一个元组，所以它和列表一样可以保存多条数据
+
+# 特点
+# 1. 元组中的元素是无法修改的，事实上我们在项目中尤其是多线程环境（后面会讲到）中可能更喜欢使用的是那些不变对象（一方面因为对象状态不能修改，所以可以避免由此引起的不必要的程序错误，简单的说就是一个不变的对象要比可变的对象更加容易维护；另一方面因为没有任何一个线程能够修改不变对象的内部状态，一个不变对象自动就是线程安全的，这样就可以省掉处理同步化的开销。一个不变对象可以方便的被共享访问）。所以结论就是：如果不需要对元素进行添加、删除、修改的时候，可以考虑使用元组，当然如果一个方法要返回多个值，使用元组也是不错的选择
+# 2. 元组在创建时间和占用的空间上面都优于列表。可以使用sys模块的getsizeof函数来检查存储同样的元素的元组和列表各自占用了多少内存空间
+
+# 定义元组
+t = ("h", "e", "l", "l", "o", 1, 2, True)
+
+# 获取元组中元素
+print(t[0])
+
+# 遍历元组中元素
+for member in t :
+    print(member)
+
+# 重新给元组赋值
+t[0] = "111" # TypeError: 'tuple' object does not support item assignment
+
+
+# 变量 t 重新引用了新的元组，原来的元组将会被垃圾回收
+t = ("hello", 3, False)
+
+# 将元组转换为列表
+l1 = list(t)
+
+# 将列表转化为元组
+l2 = ["apple", "banana"]
+t2 = tuple(l2)
+print(t2)
+```
 - **集合**
+```python
+# python 中的集合和数学上的集合是一致的，不允许有重复元素，而且可以进行交集、并集、差集等运算
+
+# 创建集合
+set1 = {1, 2, 3, 4}
+
+# 创建集合的构造语法
+set2 = set{range(1, 10)}
+set3 = set{range(1, 0, 4, 3)}
+
+# 创建集合的推导式语法
+set4 = {num for num in range(1, 10) if num % 3 == 0 or num % 5 == 0}
+# {9, 3, 5, 6}
+
+# 向集合中添加删除元素
+set4.add(4)
+set4.update([2, 999])
+set4.discard(5)
+if 4 in set4 :
+    set4.remove(4)
+set4.pop()
+
+# 集合的成员、交集、并集、差集等运算
+set1 = {1, 2, 3, 4}
+set1 = {3, 4, 5, 6}
+print(set1 & set2)
+# print(set1.intersection(set2))
+print(set1 | set2)
+# print(set1.union(set2))
+print(set1 - set2)
+# print(set1.difference(set2))
+print(set1 ^ set2)
+# print(set1.symmetric_difference(set2))
+# 判断子集和超集
+print(set2 <= set1)
+# print(set2.issubset(set1))
+print(set3 <= set1)
+# print(set3.issubset(set1))
+print(set1 >= set2)
+# print(set1.issuperset(set2))
+print(set1 >= set3)
+# print(set1.issuperset(set3))
+```
 - **字典**
+```python
+# 字典是另一种可变容器模型，python中的字典跟我们生活中使用的字典是一样一样的，它可以存储任意类型对象，与列表、集合不同的是，字典的每个元素都是由一个键和一个值组成的“键值对”，键和值通过冒号分开
 
+# 创建字典
+scores = {"Name" : "Will", "Age" : 18}
 
+# 创建字典的构造器语法
+items1 = dict(A = "a", B = "b", C = True, D = 1)
 
+# 通过zip函数将两个序列压缩成字典
+items2 = dict(zip(['a', 'b', 'c'], '123'))
+# {'a': '1', 'b': '2', 'c': '3'}
+
+# 通过键可以获取字典中对应的值
+print(scores["Name"])
+# get方法也是通过键获取对应的值，但是 get 方法可以设置默认值，如果指定键的值不存在时，返回该默认值
+print(scores.get("Name"))
+print(scores.get("N", "Not Found"))
+
+# 遍历字典
+for key in scores : 
+    print(f"{key} : {scores[key]}")
+
+# 更新字典中的元素
+scores["Age"] = 20
+scores.update(name = "M", Age = 20)
+
+# 删除字典中的元素
+scores.popitem()
+scores.pop("Name", "Will")
+
+# 清空字典
+scores.clear()
+```
 </details>
 
 <b><details><summary>输入函数</summary></b>
@@ -145,8 +356,8 @@ print("a = %.2f"%a)
 <b><details><summary>表达式</summary></b>
 
 - **字符串操作**
-    - 操作符 + 可以实现两个字符串的连接操作
-    - 字符串可理解为字节序列，若长度为 L, 第一个字节索引为 0 或 -L，最后一个字节索引为 L-1 或 -1
+    - 操作符 `+` 可以实现两个字符串的连接操作
+    - 字符串可理解为字节序列，若长度为 `L`, 第一个字节索引为 `0` 或 `-L`，最后一个字节索引为 `L-1` 或 `-1`
     - 以区间形式获得字符串的子串，左闭右开
     ```python
     tIndex = "python"
