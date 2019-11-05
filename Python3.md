@@ -3,6 +3,7 @@
 
   - [**基本语法**](#基本语法)
   - [**基本数据类型**](#基本数据类型)
+  - [**类和对象**](#类和对象)
 
 ## **基本语法**
 
@@ -707,7 +708,7 @@ scores.clear()
 ```
 </details>
 
-<b><details open><summary>变量和类型</summary></b>
+<b><details><summary>变量和类型</summary></b>
 
 - **类型转换**
 
@@ -739,4 +740,195 @@ scores.clear()
 
   `frozenset(s)` : 转变为不可变集合
 
+</details>
+
+## **类和对象**
+
+<b><details><summary>定义类</summary></b>
+
+```python
+# 格式
+class ClassName :
+    <statement-1>
+    .
+    .
+    .
+    <statement-N>
+
+# 类的使用
+class MyClass :
+    i = 123
+    def Print(self) :
+        print(self.i)
+x = MyClass()
+x.Print()
+```
+- **类有一个名为 `__init__()` 的特殊方法(构造方法)，该方法在类实例化时会自动调用，`__init__()` 方法可以有参数，参数通过 `__init__()` 传递到类的实例化操作上**
+
+```python
+class MyClass :
+    def __init__(self, ia, ib)
+    self.a = ia
+    self.b = ib 
+x = MyClass(1, 2)
+print(x.a, x.b)
+```
+- **`self` 代表类的实例，而非类**。类的方法与普通的函数只有一个特别的区别，那就是它们必须有一个额外的参数名称，按照惯例，它的名称是 `self`，`self` 不是 `python` 的关键字，可以换成别的
+
+```python
+class Test :
+    def Print(self) :
+        print(self)
+        print(self.__class__)
+t = Test()
+t.Print()
+# <__main__.Test object at 0x10e2224e0>
+# <class '__main__.Test'>
+
+# 从输出可以看出，self 代表的是类的实例，代表当前对象的地址，而 self.__class__ 指向类
+```
+</details>
+
+<b><details><summary>类的属性与方法</summary></b>
+
+- 在类的内部，使用 `def` 关键字来定义一个方法，与一般函数不同，类方法必须包含一个参数 `self` ，且为第一个参数，`self` 代表的是类的实例
+
+```python
+class people :
+    name = ""
+    age = 0
+    # 私有属性，在类外无法直接进行访问
+    __weight = 0
+    # 定义构造方法
+    def __init__(self, n, a, w) :
+        self.name = n
+        self.age = a
+        self.__weight = w
+    def Print(self) :
+        print("name = %s ，age = %d" % (self.name, self.age))
+p = people("M", 10, 15)
+p.Print()
+```
+
+- `__private_attrs` ：两个下划线开头，声明该属性为私有，不能在类的外部被使用或直接访问。在类内部的方法中使用时 `self.__private_attrs`
+
+- `__private_method` ：两个下划线开头，声明该方法为私有方法，只能在类的内部调用 ，不能在类的外部调用。在类的内部使用时 `self.__private_methods`
+
+```python
+class MyClass :
+    __private_attrs = "__private_attrs"  # 私有
+    public_attrs =  "__public_attrs"    # 公有
+    def __private_print(self) :
+        print("__private_print : %s" % self.__private_attrs)
+    def public_print(self) :
+        print("public_print : %s" % self.public_attrs)
+    def PrintALL(self) :
+        self.__private_print()
+        self.public_print()
+M = MyClass()
+print(M.__private_attrs)
+# Traceback (most recent call last):
+# File "test.py", line 14, in <module>
+#    print(M.__private_attrs)
+# AttributeError: 'MyClass' object has no attribute '__private_attrs'
+print(M.public_attrs)
+# __public_attrs
+M.__private_print()
+# Traceback (most recent call last):
+#  File "test.py", line 15, in <module>
+#    M.__private_print()
+# AttributeError: 'MyClass' object has no attribute '__private_print'
+M.public_print()
+# public_print : __public_attrs
+M.PrintALL()
+# __private_print : __private_attrs
+# public_print : __public_attrs
+```
+- **类的专有方法**
+  - `__init__` : 构造函数，在生成对象时调用
+  - `__del__` : 析构函数，释放对象时使用
+  - `__repr__` : 打印，转换
+  - `__setitem__` : 按照索引赋值
+  - `__getitem__` : 按照索引获取值
+  - `__len__` : 获得长度
+  - `__cmp__` : 比较运算
+  - `__call__` : 函数调用
+  - `__add__` : 加运算
+  - `__sub__` : 减运算
+  - `__mul__` : 乘运算
+  - `__truediv__` : 除运算
+  - `__mod__` : 求余运算
+  - `__pow__` : 乘方
+
+- **运算符重载**
+```python
+class Vector :
+   def __init__(self, a, b) :
+      self.a = a
+      self.b = b
+   def __str__(self) :
+      return 'Vector (%d, %d)' % (self.a, self.b)
+   def __add__(self,other) :
+      return Vector(self.a + other.a, self.b + other.b)
+v1 = Vector(2, 10)
+v2 = Vector(5, -2)
+print(v1 + v2)
+# Vector (7, 8) 
+```
+
+</details>
+
+<b><details><summary>继承</summary></b>
+
+- **格式**
+
+```python
+class DerivedClassName(BaseClassName) :
+    <statement-1>
+    .
+    .
+    .
+    <statement-2>
+```
+
+- `BaseClassName（示例中的基类名）` 必须与派生类定义在一个作用域内。除了类，还可以用表达式，基类定义在另一个模块中时这一点非常有用
+
+- **多继承**
+
+```python
+class DerivedClassName(Base1, Base2, Base3):
+    <statement-1>
+    .
+    .
+    .
+    <statement-N>
+```
+
+- 需要注意圆括号中父类的顺序，若是父类中有相同的方法名，而在子类使用时未指定，`python` 从左至右搜索 即方法在子类中未找到时，从左到右查找父类中是否包含方法
+
+```python
+class Base1 :
+    def F(self) :
+        print("Base1::F")
+    def F1(self) :
+        print("Base1::F1")
+class Base2 :
+    def F(self) :
+        print("Base2::F")
+    def F1(self) :
+        print("Base2::F1")
+    def F2(self) :
+        print("Base2::F2")
+class Derived1(Base1, Base2) :
+    def F(self) :  # 重写 F 方法
+        print("Derived1::F")
+D = Derived1()
+D.F()           # 调用的重写的函数
+D.F1()          # 调用的括号中靠左的类的方法
+D.F2()          # 从左至右查找
+super(Derived1, D).F() # 用子类对象调用父类已被覆盖的方法
+# Derived1::F
+# Base1::F1
+# Base2::F2
+```
 </details>
