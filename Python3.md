@@ -808,6 +808,8 @@ class people :
         print("name = %s ，age = %d" % (self.name, self.age))
 p = people("M", 10, 15)
 p.Print()
+# 也可以通过给类发消息来调用对象方法但是要传入接收消息的对象作为参数
+people.Print(p)
 ```
 
 - `__private_attrs` ：两个下划线开头，声明该属性为私有，不能在类的外部被使用或直接访问。在类内部的方法中使用时 `self.__private_attrs`
@@ -875,6 +877,82 @@ v2 = Vector(5, -2)
 print(v1 + v2)
 # Vector (7, 8) 
 ```
+- **`@property` 装饰器**，如果不设置 `setter` 方法，那么属性就是只读的 
+
+```python
+class Student(object) :
+    @property
+    def score(self) :
+        return self._score
+    @score.setter
+    def score(self, value) :
+        if not isinstance(value, int) :
+            raise ValueError("Score must be an integar!")
+        if value < 0 or value > 100 :
+            raise ValueError("Score must between 0 ~ 100!")
+        self._score = value
+x = Student()
+x.score = 60
+print(x.score)
+```
+
+- **`__slots__` 魔法**，`python` 是一门动态语言，通常动态语言支持在程序运行时给对象绑定新的属性或方法，如果我们需要限定自定义类型的对象只能绑定某些属性，可以通过在类中定义 `__slots__` 变量来进行限定。要注意的是 `__slots__` 的限定只对当前类的对象生效，对子类并不起任何作用
+
+```python
+class Person(object):
+
+    # 限定Person对象只能绑定_name和_gender属性
+    __slots__ = ("_name", "_gender")
+
+    def __init__(self, name):
+        self._name = name
+
+    @property
+    def name(self):
+        return self._name
+
+def main():
+    person = Person("M")
+    person._gender = "男"
+    person._age = 20
+
+if __name__ == "__main__" :
+    main()
+# Traceback (most recent call last):
+#  File "test.py", line 22, in <module>
+#    main()
+#  File "test.py", line 18, in main
+#    person._age = 20
+# AttributeError: 'Person' object has no attribute '_age'
+```
+
+
+- **静态方法**，静态方法属于类不属于对象
+```python
+class MyClass :
+    @staticmethod
+    def Print() :
+        print("staticmethod")
+MyClass.Print()
+```
+
+- **类方法**，类方法的第一个参数约定名为 `cls` ，它代表的是当前类相关的信息的对象（类本身也是一个对象，有的地方也称之为类的元数据对象），通过这个参数可以获取和类相关的信息并且可以创建出类的对象
+```python
+class MyClass :
+    def __init__(self, a, b) :
+        self._a = a
+        self._b = b
+
+    @classmethod
+    def newObj(cls) :
+        return cls(1, 2)
+
+    def show(self) :
+        print(self._a)
+        print(self._b)
+x = MyClass.newObj()
+x.show()
+```
 
 </details>
 
@@ -931,4 +1009,39 @@ super(Derived1, D).F() # 用子类对象调用父类已被覆盖的方法
 # Base1::F1
 # Base2::F2
 ```
+</details>
+
+
+<b><details open><summary>多态</summary></b>
+
+- 将基类定义为抽象类，通过 `abc` 模块的 `ABCMeta` 元类和 `abstractmethod` 包装器
+
+```python
+from abc import ABCMeta, abstractmethod
+
+class Base(object, metaclass = ABCMeta) :
+    def __init__(self) :
+        print("Base")
+
+    @abstractmethod
+    def Print(self) :
+        pass
+class Derived1(Base) :
+    def __init__(self) :
+        print("Derived1")
+    def Print(self) :
+        print("Derived1::Print")
+class Derived2(Base) :
+    def __init__(self) :
+        print("Derived2")
+    def Print(self) :
+        print("Derived2::Print")
+def main() :
+    list1 = [Derived1(), Derived2()]
+    for e in list1 :
+        e.Print()
+if __name__ == "__main__"
+    main()
+```
+
 </details>
