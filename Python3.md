@@ -1012,7 +1012,7 @@ super(Derived1, D).F() # 用子类对象调用父类已被覆盖的方法
 </details>
 
 
-<b><details open><summary>多态</summary></b>
+<b><details><summary>多态</summary></b>
 
 - 将基类定义为抽象类，通过 `abc` 模块的 `ABCMeta` 元类和 `abstractmethod` 包装器
 
