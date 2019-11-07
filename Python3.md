@@ -4,6 +4,7 @@
   - [**基本语法**](#基本语法)
   - [**基本数据类型**](#基本数据类型)
   - [**类和对象**](#类和对象)
+  - [**文件和异常**](#文件和异常)
 
 ## **基本语法**
 
@@ -1043,5 +1044,64 @@ def main() :
 if __name__ == "__main__"
     main()
 ```
-
 </details>
+
+## **文件和异常**
+
+<b><detailsg><summary>读写JSON文件</summary></b>
+
+- 使用 `python` 中的 `json` 模块将字典或列表以 `JSON` 格式保存到文件中
+```python
+import json
+
+def main() :
+    MyDict = {
+        "Name" : "MyDict",
+        "Time" : "2019-11-7",
+        "List" : [
+            {"hello" : "你好"},
+            {"world" : "世界"}
+        ]
+    }
+    try : 
+        with open("MyDict.json", "w", encoding = "utf-8") as fs : 
+            json.dump(MyDict, fs)
+    except IOError as e :
+        print(e)
+    print("Save Success!")
+if __name__ == "__main__" : 
+    main()
+```
+- `json` 模块中有四个比较重要的函数
+  - `dump` 将 `python` 对象按照 `JSON` 格式序列化到文件中
+  - `dumps` 将 `python` 对象处理成 `JSON` 格式的字符串
+  - `load` 将文件中的 `JSON` 数据转化成对象
+  - `loads` 将字符串的内容转化成 `python` 对象
+
+```python
+#!/usr/bin/python3
+import json
+ 
+# Python 字典类型转换为 JSON 对象
+data1 = {
+    "A" : "a",
+    "B" : "b",
+    "C" : "c" 
+}
+ 
+json_str = json.dumps(data1)
+print ("Python 原始数据：", repr(data1))
+print ("JSON 对象：", json_str)
+ 
+# 将 JSON 对象转换为 Python 字典
+data2 = json.loads(json_str)
+print ("data2[\"A\"]: ", data2["A"])
+print ("data2[\"C\"]: ", data2["C"])
+
+# Python 原始数据： {'A': 'a', 'B': 'b', 'C': 'c'}
+# JSON 对象： {"A": "a", "B": "b", "C": "c"}
+# data2["A"]:  a
+# data2["A"]:  c
+```
+
+</detailsg>
